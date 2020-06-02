@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nchu.software.mapper.MyLikeMapper">
+	
+    <insert id="insertMyLike" parameterType="cn.edu.nchu.software.entity.MyLikeEntity">
+    	insert into my_like values (#{userID},#{commentID})
+    </insert>
+    
+    <select id="countByCommentID" resultType="int">
+    	select COUNT(*) from my_like where commentID = #{commentID}
+    </select>
+    
+    <select id="findMyLike" resultType="cn.edu.nchu.software.entity.MyLikeEntity">
+    	select * from my_like where userID = #{userID} and commentID = #{commentID}
+    </select>
+	
+	<delete id="deleteMyLike" parameterType="cn.edu.nchu.software.entity.MyLikeEntity">
+    	delete from my_like where userID = #{userID} and commentID = #{commentID}
+    </delete>
+    
+</mapper>

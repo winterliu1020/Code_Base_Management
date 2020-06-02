@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+	<div th:fragment="menu">
+		<div class="menu">
+		<aside id="leftsidebar" class="sidebar">
+	 <!-- User Info -->
+            <div class="user-info">
+                <div class="image">
+                    <img th:src="(${session.User.picture} ne null)?${session.User.picture}:'/images/user.png'" width="48" height="48" alt="User" />
+                </div>
+                <div class="info-container">
+                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="${session.User.name}"></div>
+                    <div class="email" th:text="${session.User.username} + '@nchu.edu.cn'"></div>
+                    <div class="btn-group user-helper-dropdown">
+                        <ul class="dropdown-menu pull-right">
+                            <li><a href="javascript:void(0);"><i class="material-icons">person</i>Profile</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="javascript:void(0);"><i class="material-icons">group</i>Followers</a></li>
+                            <li><a href="javascript:void(0);"><i class="material-icons">shopping_cart</i>Sales</a></li>
+                            <li><a href="javascript:void(0);"><i class="material-icons">favorite</i>Likes</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="javascript:void(0);"><i class="material-icons">input</i>Sign Out</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- #User Info -->
+            <!-- Menu -->
+            <div class="menu">
+                <ul class="list">
+                    <li class="header">菜单栏</li>
+                    <li>
+                        <a href="/my/code/list/1">
+                            <i class="material-icons">home</i>
+                            <span>个人主页</span>
+                        </a>
+                        <!-- 用户管理，只有管理员才显示 -->
+                    	<a href="/listUser" th:if="${session.User.userType  eq 1}">
+                            <i class="material-icons">assignment</i>
+                            <span>管理用户</span>
+                        </a>
+                    	<!-- 用户管理，只有管理员才显示 -->
+                    </li>
+                    <li>
+                        <a class="menu-toggle">
+                            <i class="material-icons">widgets</i>
+                            <span>浏览</span>
+                        </a>
+                        <ul class="ml-menu" id="browse">
+                            <li>
+                                <a class="menu-toggle">
+                                    <span>代码展示</span>
+                                </a>
+                                <ul class="ml-menu" id="codeShow">
+                                    <li th:each="t:${session.types}">
+                                        <a th:id="'c'+${t.typeID}" th:href="'/code/list/'+${t.typeID}" th:text="${t.typeContext}"></a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a class="menu-toggle">
+                                    <span>教程展示</span>
+                                </a>
+                                <ul class="ml-menu" id="a1">
+                                    <li th:each="t:${session.types}">
+                                        <a th:id="'a1'+${t.typeID}" th:href="'/article/list/1/'+${t.typeID}" th:text="${t.typeContext}"></a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a class="menu-toggle">
+                                    <span>征集展示</span>
+                                </a>
+                                <ul class="ml-menu" id="a2">
+                                    <li th:each="t:${session.types}">
+                                        <a th:id="'a2'+${t.typeID}" th:href="'/article/list/2/'+${t.typeID}" th:text="${t.typeContext}"></a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a class="menu-toggle">
+                                    <span>疑问展示</span>
+                                </a>
+                                <ul class="ml-menu" id="a3">
+                                    <li th:each="t:${session.types}">
+                                        <a th:id="'a3'+${t.typeID}" th:href="'/article/list/3/'+${t.typeID}" th:text="${t.typeContext}"></a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="menu-toggle">
+                             <i class="material-icons">swap_calls</i>
+                            <span>发布</span>
+                        </a>
+                        <ul class="ml-menu" id="add">
+                            <li>
+                                <a href="/code">
+                                    <span id="addCode">代码发布</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/article/1">
+                                    <span id="addArticle1">教程发布</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/article/2">
+                                    <span id="addArticle2">代码征集</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/article/3">
+                                    <span id="addArticle3">疑问发布</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>          
+                </ul>
+            </div>
+            <!-- #Menu -->
+            <!-- Footer -->
+            <div class="legal" style="text-align: center;">
+		         <a href="/">
+		             <i class="material-icons" style="color: red" title="退出系统">power_settings_new</i>
+		         </a>
+            </div>
+            <!-- #Footer -->
+            </aside>
+          </div>
+	</div>
+</body>
+</html>

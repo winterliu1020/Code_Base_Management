@@ -1,0 +1,260 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<title th:text="${title}"></title>
+
+<script src="../../plugins/jquery/jquery.min.js"></script>
+<link rel="stylesheet" th:href="@{/editor/css/style.css}" />
+<link rel="stylesheet" th:href="@{/editor/css/editormd.css}" />
+<link rel="shortcut icon"
+	href="https://pandao.github.io/editor.md/favicon.ico"
+	type="image/x-icon" />
+<script type="text/javascript" th:src="@{/editor/editormd.min.js}"></script>
+<!-- Favicon-->
+<link rel="icon" href="../../favicon.ico" type="image/x-icon">
+
+<!-- Google Fonts -->
+<link
+	href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext"
+	rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet" type="text/css">
+
+<!-- Bootstrap Core Css -->
+<link rel="stylesheet" th:href="@{/plugins/bootstrap/css/bootstrap.css}" />
+
+<!-- Waves Effect Css -->
+<link rel="stylesheet" th:href="@{/plugins/node-waves/waves.css}" />
+
+<!-- Bootstrap Tagsinput Css -->
+<link rel="stylesheet"
+	th:href="@{/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css}" />
+
+<!-- Animation Css -->
+<link rel="stylesheet" th:href="@{/plugins/animate-css/animate.css}" />
+
+<!-- Custom Css -->
+<link rel="stylesheet" th:href="@{/css/style.css}" />
+
+<!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+<link rel="stylesheet" th:href="@{/css/themes/all-themes.css}" />
+
+<!-- Sweet Alert Css -->
+<link href="../../plugins/sweetalert/sweetalert.css" rel="stylesheet" />
+<link rel="stylesheet" th:href="@{/css/uploadfile.css}" />
+
+</head>
+
+<body class="theme-red">
+	<!-- Top Bar -->
+	<div th:replace="topbar :: topbar"></div>
+	<!-- #Top Bar -->
+	<section>
+		<!-- Left Sidebar -->
+		<div th:replace="menu :: menu"></div>
+		<!-- #END# Left Sidebar -->
+		<!-- Right Sidebar -->
+		<div th:replace="right :: right"></div>
+		<!-- #END# Right Sidebar -->
+	</section>
+
+	<section class="content">
+
+		<!-- 教程发布 -->
+		<!-- Advanced Form Example With Validation -->
+		<div class="row clearfix">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<div class="card">
+					<div class="header">
+						<h2 th:text="'请在以下区域进行' + ${title}"></h2>
+						<ul class="header-dropdown m-r--5">
+							<li class="dropdown"><a href="javascript:void(0);"
+								class="dropdown-toggle" data-toggle="dropdown" role="button"
+								aria-haspopup="true" aria-expanded="false"> <i
+									class="material-icons">more_vert</i>
+							</a>
+								<ul class="dropdown-menu pull-right">
+									<li><a href="javascript:void(0);">Action</a></li>
+									<li><a href="javascript:void(0);">Another action</a></li>
+									<li><a href="javascript:void(0);">Something else here</a></li>
+								</ul></li>
+						</ul>
+					</div>
+					<div class="body">
+						<form id="wizard_with_validation" method="POST" action="">
+							<input type="hidden" id="articleType" th:value="${articleType}"/>
+							<input type="hidden" id="userID" th:value="${session.User.userID}"/>
+							<h3 th:text="主题和类型"></h3>
+							<fieldset>
+								<div class="form-group form-float">
+									<div class="form-line">
+										<input type="text" class="form-control" id="articleTitle" name="username"
+											required> <label class="form-label">主题</label>
+									</div>
+								</div>
+
+								<!-- select 选择一个教程的类型 -->
+								<!-- 选择类型 -->
+								<div class="demo-radio-button">
+									<div th:each="type,typeStat : ${types}" style="float: left">
+										<input name="group" type="radio" th:id="'radio' + ${typeStat.count}" class="with-gap" th:value="${type.typeID}" /> 
+										<label th:for="'radio' + ${typeStat.count}" style="min-width: 80px;margin-right: 50px" th:text="${type.typeContext}"></label>
+									</div>
+								</div>
+								<!-- 选择类型 -->
+								<!-- select -->
+
+							</fieldset>
+
+							<h3>输入关键字</h3>
+							<fieldset>
+								<!-- Tags Input -->
+
+								<div class="form-group demo-tagsinput-area">
+									<div class="form-line">
+										<input type="text" class="form-control" data-role="tagsinput" id="keyword">
+									</div>
+								</div>
+								<!-- #END# Tags Input -->
+							</fieldset>
+
+							<h3 th:text="${title}"></h3>
+							<fieldset>
+
+								<!-- 教程MD编辑器 -->
+								<h2>在下方编辑器输入内容</h2>
+								<input id="acceptTerms-2" name="acceptTerms" type="checkbox"
+									required> <label for="acceptTerms-2">我已完成输入！</label>
+							</fieldset>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- #END# Advanced Form Example With Validation -->
+
+		<!-- 代码发布结束 -->
+		<!-- Markdown编辑器 -->
+		<div id="test-editormd">
+		<textarea style="display: none;" id="textContent" name="textContent"></textarea>
+		第二个隐藏文本域，用来构造生成的HTML代码，方便表单POST提交，这里的name可以任意取，后台接受时以这个name键为准
+		<textarea id="content" class="editormd-html-textarea" name="content"></textarea>
+		</div>
+	<!-- 模态框（Modal）上传文件 -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h6 class="modal-title" id="myModalLabel">
+						<strong>添加文件</strong>
+					</h6>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+				</div>
+
+				<div class="modal-body">
+					<form id="excelForm" class="form-inline">
+						<div class="form-group col-md-12">
+							<label class="control-label md-file-lable">文件名称</label> <input
+								type="text" id="text" class="md-file-text" style="float: left">
+							<label for="file">
+								<div id="upfile" class="md-file-button" type="button">选择文件</div>
+							</label> <input type="file" name="editormd-image-file" id="file"
+								style="display: none">
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer" style="border-top: 0px">
+					<button type="button" class="btn btn-default" onclick="upload()">上传</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	</section>
+	
+	<script th:inline="javascript">
+		var articleType = [[${articleType}]];
+		$('#add').show();
+    	$("#addArticle"+articleType).css({"color":"blue","font-size":"18px"});
+	</script>
+
+	<!-- publishMD Js -->
+	<script type="text/javascript"
+		th:src="@{/js/publishMD.js}"></script>
+		
+	<!-- Bootstrap Core Js -->
+	<script type="text/javascript"
+		th:src="@{/plugins/bootstrap/js/bootstrap.js}"></script>
+
+	<!-- Select Plugin Js -->
+	<script type="text/javascript"
+		th:src="@{/plugins/bootstrap-select/js/bootstrap-select.js}"></script>
+
+	<!-- Slimscroll Plugin Js -->
+	<script type="text/javascript"
+		th:src="@{/plugins/jquery-slimscroll/jquery.slimscroll.js}"></script>
+
+	<!-- Jquery Validation Plugin Css -->
+	<script type="text/javascript"
+		th:src="@{/plugins/jquery-validation/jquery.validate.js}"></script>
+
+	<!-- JQuery Steps Plugin Js -->
+	<script type="text/javascript"
+		th:src="@{/plugins/jquery-steps/jquery.steps.js}"></script>
+
+	<!-- Sweet Alert Plugin Js -->
+	<script type="text/javascript"
+		th:src="@{/plugins/sweetalert/sweetalert.min.js}"></script>
+
+	<!-- Waves Effect Plugin Js -->
+	<script type="text/javascript" th:src="@{/plugins/node-waves/waves.js}"></script>
+
+	<!-- Custom Js -->
+	<script type="text/javascript" th:src="@{/js/admin.js}"></script>
+
+	<script type="text/javascript"
+		th:src="@{/js/pages/forms/my-form-wizard.js}"></script>
+	<!--  <script src="../../js/pages/forms/advanced-form-elements.js"></script> -->
+
+	<!-- Demo Js -->
+	<script type="text/javascript" th:src="@{/js/demo.js}"></script>
+
+	<!-- 多加入的 -->
+	<!-- Bootstrap Colorpicker Js -->
+	<script type="text/javascript"
+		th:src="@{/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js}"></script>
+
+	<!-- Dropzone Plugin Js -->
+	<script type="text/javascript"
+		th:src="@{/plugins/dropzone/dropzone.js}"></script>
+
+	<!-- Input Mask Plugin Js -->
+	<script type="text/javascript"
+		th:src="@{/plugins/jquery-inputmask/jquery.inputmask.bundle.js}"></script>
+
+	<!-- Multi Select Plugin Js -->
+	<script type="text/javascript"
+		th:src="@{/plugins/multi-select/js/jquery.multi-select.js}"></script>
+
+	<!-- Jquery Spinner Plugin Js -->
+	<script type="text/javascript"
+		th:src="@{/plugins/jquery-spinner/js/jquery.spinner.js}"></script>
+
+	<!-- noUISlider Plugin Js -->
+	<script type="text/javascript"
+		th:src="@{/plugins/nouislider/nouislider.js}"></script>
+
+	<!-- Bootstrap Tags Input Plugin Js -->
+	<script type="text/javascript"
+		th:src="@{/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js}"></script>
+
+</body>
+
+</html>

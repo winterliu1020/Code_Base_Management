@@ -1,0 +1,357 @@
+{"properties": [
+  {
+    "name": "spring.datasource.minIdle",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.minIdle'"
+  },
+  {
+    "name": "spring.datasource.minIdle",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.minIdle'"
+  },
+  {
+    "name": "spring.datasource.initialSize",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.initialSize'"
+  },
+  {
+    "name": "spring.datasource.initialSize",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.initialSize'"
+  },
+  {
+    "name": "spring.datasource.initialSize",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.initialSize'"
+  },
+  {
+    "name": "spring.datasource.connectionProperties",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.connectionProperties'"
+  },
+  {
+    "name": "spring.datasource.initialSize",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.initialSize'"
+  },
+  {
+    "name": "spring.datasource.maxActive",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.maxActive'"
+  },
+  {
+    "name": "spring.datasource.maxWait",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.maxWait'"
+  },
+  {
+    "name": "spring.datasource.timeBetweenEvictionRunsMillis",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.timeBetweenEvictionRunsMillis'"
+  },
+  {
+    "name": "spring.datasource.minEvictableIdleTimeMillis",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.minEvictableIdleTimeMillis'"
+  },
+  {
+    "name": "spring.datasource.validationQuery",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.validationQuery'"
+  },
+  {
+    "name": "spring.datasource.testWhileIdle",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.testWhileIdle'"
+  },
+  {
+    "name": "spring.datasource.testOnBorrow",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.testOnBorrow'"
+  },
+  {
+    "name": "spring.datasource.testOnReturn",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.testOnReturn'"
+  },
+  {
+    "name": "spring.datasource.poolPreparedStatements",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.poolPreparedStatements'"
+  },
+  {
+    "name": "spring.datasource.maxPoolPreparedStatementPerConnectionSize",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.maxPoolPreparedStatementPerConnectionSize'"
+  },
+  {
+    "name": "spring.datasource.filters",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.filters'"
+  },
+  {
+    "name": "spring.datasource.initialSize",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.initialSize'"
+  },
+  {
+    "name": "spring.datasource.initialSize",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.initialSize'"
+  },
+  {
+    "name": "spring.datasource.initialSize",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.initialSize'"
+  },
+  {
+    "name": "spring.datasource.initialSize",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.initialSize'"
+  },
+  {
+    "name": "spring.datasource.initialSize",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.initialSize'"
+  },
+  {
+    "name": "spring.datasource.initialSize",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.initialSize'"
+  },
+  {
+    "name": "spring.datasource.initialSize",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.initialSize'"
+  },
+  {
+    "name": "spring.datasource.connectionProperties",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.connectionProperties'"
+  },
+  {
+    "name": "spring.datasource.connectionProperties",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.connectionProperties'"
+  },
+  {
+    "name": "spring.datasource.connectionProperties",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.connectionProperties'"
+  },
+  {
+    "name": "spring.datasource.logSlowSql",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.logSlowSql'"
+  },
+  {
+    "name": "spring.datasource.initialSize",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.initialSize'"
+  },
+  {
+    "name": "spring.datasource.exceptionSorter",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.exceptionSorter'"
+  },
+  {
+    "name": "spring.datasource.useGlobalDataSourceStat",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.useGlobalDataSourceStat'"
+  },
+  {
+    "name": "spring.datasource.druid.initial-size",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.druid.initial-size'"
+  },
+  {
+    "name": "spring.datasource.druid.max-active",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.druid.max-active'"
+  },
+  {
+    "name": "spring.datasource.druid.min-idle",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.druid.min-idle'"
+  },
+  {
+    "name": "spring.datasource.druid.max-wait",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.druid.max-wait'"
+  },
+  {
+    "name": "spring.datasource.druid.pool-prepared-statements",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.druid.pool-prepared-statements'"
+  },
+  {
+    "name": "spring.datasource.druid.max-pool-prepared-statement-per-connection-size",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.druid.max-pool-prepared-statement-per-connection-size'"
+  },
+  {
+    "name": "spring.datasource.druid.validation-query",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.druid.validation-query'"
+  },
+  {
+    "name": "spring.datasource.druid.validation-query-timeout",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.druid.validation-query-timeout'"
+  },
+  {
+    "name": "spring.datasource.druid.test-on-borrow",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.druid.test-on-borrow'"
+  },
+  {
+    "name": "spring.datasource.druid.test-on-return",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.druid.test-on-return'"
+  },
+  {
+    "name": "spring.datasource.druid.test-while-idle",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.druid.test-while-idle'"
+  },
+  {
+    "name": "spring.datasource.druid.remove-abandoned",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.druid.remove-abandoned'"
+  },
+  {
+    "name": "spring.datasource.druid.remove-abandoned-timeout",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.druid.remove-abandoned-timeout'"
+  },
+  {
+    "name": "spring.datasource.druid.min-evictableIdle-timeMillis",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.druid.min-evictableIdle-timeMillis'"
+  },
+  {
+    "name": "spring.datasource.druid.min-evictableIdle-time-millis",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.druid.min-evictableIdle-time-millis'"
+  },
+  {
+    "name": "spring.datasource.druid.min-evictable-idle-time-millis",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.druid.min-evictable-idle-time-millis'"
+  },
+  {
+    "name": "spring.datasource.druid.time-between-eviction-runs-millis",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.druid.time-between-eviction-runs-millis'"
+  },
+  {
+    "name": "spring.datasource.druid.type",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.druid.type'"
+  },
+  {
+    "name": "spring.datasource.druid.url",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.druid.url'"
+  },
+  {
+    "name": "spring.datasource.druid.driver-class-name",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.druid.driver-class-name'"
+  },
+  {
+    "name": "spring.datasource.druid.password",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.druid.password'"
+  },
+  {
+    "name": "spring.datasource.druid.username",
+    "type": "java.lang.String",
+    "description": "A description for 'spring.datasource.druid.username'"
+  },
+  {
+    "name": "log4j.appender.stdout ",
+    "type": "java.lang.String",
+    "description": "A description for 'log4j.appender.stdout '"
+  },
+  {
+    "name": "log4j.rootLogger ",
+    "type": "java.lang.String",
+    "description": "A description for 'log4j.rootLogger '"
+  },
+  {
+    "name": "log4j.appender.stdout.Target ",
+    "type": "java.lang.String",
+    "description": "A description for 'log4j.appender.stdout.Target '"
+  },
+  {
+    "name": "log4j.appender.stdout.layout.ConversionPattern ",
+    "type": "java.lang.String",
+    "description": "A description for 'log4j.appender.stdout.layout.ConversionPattern '"
+  },
+  {
+    "name": "log4j.appender.D ",
+    "type": "java.lang.String",
+    "description": "A description for 'log4j.appender.D '"
+  },
+  {
+    "name": "log4j.appender.D.File ",
+    "type": "java.lang.String",
+    "description": "A description for 'log4j.appender.D.File '"
+  },
+  {
+    "name": "log4j.appender.D.Append ",
+    "type": "java.lang.String",
+    "description": "A description for 'log4j.appender.D.Append '"
+  },
+  {
+    "name": "log4j.appender.D.Threshold ",
+    "type": "java.lang.String",
+    "description": "A description for 'log4j.appender.D.Threshold '"
+  },
+  {
+    "name": "log4j.appender.D.layout ",
+    "type": "java.lang.String",
+    "description": "A description for 'log4j.appender.D.layout '"
+  },
+  {
+    "name": "log4j.appender.D.layout.ConversionPattern ",
+    "type": "java.lang.String",
+    "description": "A description for 'log4j.appender.D.layout.ConversionPattern '"
+  },
+  {
+    "name": "log4j.appender.E ",
+    "type": "java.lang.String",
+    "description": "A description for 'log4j.appender.E '"
+  },
+  {
+    "name": "log4j.appender.E.File ",
+    "type": "java.lang.String",
+    "description": "A description for 'log4j.appender.E.File '"
+  },
+  {
+    "name": "log4j.appender.E.Append ",
+    "type": "java.lang.String",
+    "description": "A description for 'log4j.appender.E.Append '"
+  },
+  {
+    "name": "log4j.appender.E.layout ",
+    "type": "java.lang.String",
+    "description": "A description for 'log4j.appender.E.layout '"
+  },
+  {
+    "name": "log4j.appender.E.Threshold ",
+    "type": "java.lang.String",
+    "description": "A description for 'log4j.appender.E.Threshold '"
+  },
+  {
+    "name": "log4j.appender.E.layout.ConversionPattern ",
+    "type": "java.lang.String",
+    "description": "A description for 'log4j.appender.E.layout.ConversionPattern '"
+  },
+  {
+    "name": "img.location",
+    "type": "java.lang.String",
+    "description": "A description for 'img.location'"
+  }
+]}

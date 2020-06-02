@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>疑问展示</title>
+
+<link rel="stylesheet" th:href="@{/editor/css/style.css}" />
+<link rel="stylesheet" th:href="@{/editor/css/editormd.css}" />
+<link rel="shortcut icon"
+	href="https://pandao.github.io/editor.md/favicon.ico"
+	type="image/x-icon" />
+<script type="text/javascript" th:src="@{/editor/editormd.min.js}"></script>
+
+<!-- Favicon-->
+<link rel="icon" href="../../favicon.ico" type="image/x-icon">
+
+<!-- Google Fonts -->
+<link
+	href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext"
+	rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet" type="text/css">
+
+<!-- Bootstrap Core Css -->
+<link rel="stylesheet" th:href="@{/plugins/bootstrap/css/bootstrap.css}" />
+<link rel="stylesheet"
+	th:href="@{/plugins/bootstrap/css/bootstrap.min.css}" />
+
+<!-- Waves Effect Css -->
+<link rel="stylesheet" th:href="@{/plugins/node-waves/waves.css}" />
+
+<!-- Bootstrap Tagsinput Css -->
+<link rel="stylesheet"
+	th:href="@{/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css}" />
+
+<!-- Animation Css -->
+<link rel="stylesheet" th:href="@{/plugins/animate-css/animate.css}" />
+
+<!-- Custom Css -->
+<link rel="stylesheet" th:href="@{/css/style.css}" />
+
+<!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+<link rel="stylesheet" th:href="@{/css/themes/all-themes.css}" />
+
+<script type="text/javascript" th:src="@{/plugins/jquery/jquery.min.js}"></script>
+
+<link rel="stylesheet" th:href="@{/editor/css/editormd.preview.min.css}" />
+<link rel="stylesheet" th:href="@{/editor/css/editormd.css}" />
+
+<style type="text/css">
+.md-file-lable {
+	float: left;
+	display: block;
+	width: 75px;
+	text-align: left;
+	padding: 7px 0 15px 5px;
+	margin: 0 0 2px;
+	font-weight: normal;
+}
+
+.md-file-text {
+	float: left;
+	color: #999;
+	padding: 8px;
+	border: 1px solid #ddd;
+	width: 60%;
+}
+
+.md-file-button {
+	float: left;
+	color: #666;
+	cursor: pointer;
+	background: #fff;
+	padding: 7px 10px;
+	border: 1px solid #ddd;
+	margin-bottom: 20px;
+	border-radius: 3px;
+	transition: background 300ms ease-out;
+	margin-bottom: 20px;
+}
+
+
+</style>
+
+<!-- comment -->
+</head>
+<body style="text-align: left;">
+	<!-- Top Bar -->
+	<div th:replace="topbar :: topbar"></div>
+	<!-- #Top Bar -->
+	<section>
+		<!-- Left Sidebar -->
+		<div th:replace="menu :: menu"></div>
+		<!-- #END# Left Sidebar -->
+		<!-- Right Sidebar -->
+		<div th:replace="right :: right"></div>
+		<!-- #END# Right Sidebar -->
+	</section>
+	<section class="content">
+
+		<div class="panel panel-default panel-post">
+			<div class="panel-heading">
+
+				<!-- 疑问标题行 -->
+				<div class="row">
+					<div class="col-md-10 text-center">
+						<span class="card-inside-title font-24 "
+							th:text="${article.articleTitle}"></span>
+					</div>
+					<div class="col-md-2 text-center">
+						<a class="btn btn-block btn-lg btn-info waves-effect"
+							href="/article/3">提问</a>
+					</div>
+				</div>
+			</div>
+
+			<!-- 疑问内容和answer -->
+			<div class="panel-body">
+				<!--除去标题，下面的一大行  -->
+				<div class="row">
+					<div class="row col-md-10">
+						<!-- 中间列 -->
+						<div class="row">
+							<!-- 上半行  包括：question，提问者个人信息 -->
+							<!-- 左侧区域开始 -->
+							<div class="col-md-2 text-center">
+								<!-- <i class="material-icons" style="font-size: 96px">arrow_drop_up</i>
+								向上箭头
+								<p class="font-32">222</p>
+								<i class="material-icons" style="font-size: 96px">arrow_drop_down</i> -->
+							</div>
+							<!-- 左侧区域结束 -->
+
+							<!-- 问题内容区域开始 -->
+							<div class="col-md-10">
+								<div class="row">
+									<div class="content editormd-preview-theme" id="content"
+										th:utext="${article.articleContext}"></div>
+								</div>
+								<div class="row" style="padding-left: 5%">
+									<!-- 关键字 -->
+									<span th:if="${article.keyword ne null}"
+										th:each="keyword,keywordStat : ${htmlUtil.splitString(article.keyword)}"
+										th:class="${keyword.key}" th:text="${keyword.value}"
+										style="margin-right: 10px"></span>
+								</div>
+
+								<!-- share按钮、提问题信息行 -->
+								<div class="row">
+									<div class="col-md-2" style="padding-left: 5%">
+										<!-- 分享按钮：可以将该答疑解惑页面链接复制到剪贴板 -->
+										<a><span class="card-inside-title font-15"
+											th:onclick="'javascript:copyToClipboard('+${article.articleID}+');'">分享</span></a>
+									</div>
+									<script th:inline="javascript">
+									    var articleType = [[${article.articleType}]];
+									    function  copyToClipboard(articleID){
+				                            if(window.clipboardData){
+				                            	alert("复制失败！");
+				                            } else {
+				                                 (function(articleID){
+				                                       document.oncopy=function(e){
+				                                            e.clipboardData.setData('text',"http://localhost:8080/article/" + articleType + "/" + articleID);
+				                                            e.preventDefault();
+				                                            document.oncopy=null;
+				                                        }
+				                                    })(articleID);
+				                                    document.execCommand('Copy');
+				                                    alert("复制成功！");
+				                            }
+				                       }
+				                    
+									</script>
+									<div class="col-md-5 text-center"></div>
+
+									<div
+										class="col-md-3 text-center card text-white bg-secondary mb-3">
+										<!-- 提问者信息框 -->
+										<div class="row">
+											<div class="col-md-4 text-center">
+												<p class="card-text" style="font-size: 13px">提问者</p>
+											</div>
+											<div class="col-md-8 text-center">
+												<!-- <p class="card-text">2018.09.12 11:20</p> -->
+											</div>
+										</div>
+
+										<div class="row">
+											<!-- 第二行 -->
+											<div class="col-md-4 text-center">
+												<div class="image">
+													<img th:src="(${userService.findUserByUserID(article.userID).picture} ne null)?${userService.findUserByUserID(article.userID).picture}:'../../images/user.png'" width="48" height="48"
+														alt="User" />
+												</div>
+											</div>
+											<div class="col-md-8 text-center">
+												<div class="row">
+													<div class="">
+														<p class="card-text"
+															th:text="${userService.findUserByUserID(article.userID).name}"></p>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-8 ">
+														<div class="demo-google-material-icon">
+															<i class="material-icons" style="font-size: 15px">euro_symbol</i>
+															<span class="icon-name card-text">1345分</span>
+														</div>
+
+													</div>
+													<div class="col-md-4 ">
+														<!-- <p class="card-text">暂时放在这里</p> -->
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- share按钮、提问题信息行 结束 -->
+
+								<!-- 对该疑问可以提出comment 开始   暂时未设计 -->
+
+								<!-- 对该疑问可以提出comment 结束  -->
+							</div>
+						</div>
+
+						<hr class="my-4">
+						<!-- 下半行  answer区 -->
+						<!-- answer 区开始 -->
+						<div class="row">
+							<div class="row text-center">
+								<div class="col-md-1 text-center m-l-55 text-center">
+									<p id="answerNum" class="font-32" th:text="${count}"></p>
+								</div>
+								<div class="col-md-2 text-center">
+									<p class="font-32">答复区</p>
+								</div>
+								<div class="col-md-9 text-center"></div>
+							</div>
+						</div>
+
+						<hr class="my-4">
+
+						<!--回答区内容  -->
+						<div class="row" th:each="comment,commentStat : ${comments}">
+							<!-- 下半行  包括：回答内容，回答者个人信息 -->
+							<!-- 左侧区域开始 -->
+							<div class="col-md-2 text-center">
+								<i class="material-icons" th:onclick="'addLike('+(${myLikeService.findMyLike(session.User.userID,comment.commentID) eq null}?0:1)+','+${commentStat.index}+','+${comment.commentID}+')'" style="font-size: 96px">arrow_drop_up</i>
+								<!-- 向上箭头 -->
+								<p class="font-32" th:id="'count'+${commentStat.index}" th:text="${comment.myLike}"></p>
+								<i class="material-icons" th:onclick="'deleteLike('+(${myLikeService.findMyLike(session.User.userID,comment.commentID) eq null}?0:1)+','+${commentStat.index}+','+${comment.commentID}+')'" style="font-size: 96px">arrow_drop_down</i>
+							</div>
+							<!-- 左侧区域结束 -->
+							
+							<!-- 回答内容区域开始 -->
+							<div class="col-md-10">
+								<div class="row">
+									<div class="content editormd-preview-theme" id="content"
+										th:utext="${comment.commentContext}"></div>
+								</div>
+								<!-- share按钮、提问题信息行 -->
+								<div class="row">
+									<div class="col-md-2">
+										<!-- <span class="card-inside-title  font-20 ">share</span> -->
+									</div>
+
+									<div class="col-md-5 text-center"></div>
+
+									<div
+										class="col-md-3 text-center card text-white bg-secondary mb-3">
+										<!-- 答复者信息框 -->
+										<div class="row">
+											<div class="col-md-4 text-center">
+												<p class="card-text" style="font-size: 13px">答复者</p>
+											</div>
+											<div class="col-md-8 text-center">
+												<p class="card-text"
+													th:text="${#dates.format(comment.commentTime,'yyyy-MM-dd')}"></p>
+											</div>
+										</div>
+
+										<div class="row">
+											<!-- 第二行 -->
+											<div class="col-md-4 text-center">
+												<div class="image">
+													<img th:src="(${userService.findUserByUserID(comment.userID).picture} ne null)?${userService.findUserByUserID(comment.userID).picture}:'../../images/user.png'" width="48" height="48"
+														alt="User" />
+												</div>
+											</div>
+											<div class="col-md-8 text-center">
+												<div class="row">
+													<div class="">
+														<p class="card-text"
+															th:text="${userService.findUserByUserID(comment.userID).name}"></p>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-md-8 ">
+														<div class="demo-google-material-icon">
+															<i class="material-icons" style="font-size: 15px">euro_symbol</i>
+															<span class="icon-name card-text">1345分</span>
+														</div>
+
+													</div>
+													<div class="col-md-4 ">
+														<!-- <p class="card-text">暂时放在这里</p> -->
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-11"></div>
+									<div class="col-md-1">
+									<a th:onclick="'javascript:openModal('+${comment.commentID}+','+${comment.userID}+');'">回复</a>
+									</div>
+								</div>
+								<hr class="my-4">
+								<!-- share按钮、答复 结束 -->
+
+								<!-- 对该回答发起的comment 开始  -->
+								<!-- 一个交流区开始 -->
+								<div th:each="communication,communicationStat : ${communicationService.listCommunicationByCommentID(comment.commentID)}">
+								<div class="row">
+									<div class="col-md-1">
+										<div class="image">
+											<img th:src="(${userService.findUserByUserID(communication.replyUserID).picture} ne null)?${userService.findUserByUserID(communication.replyUserID).picture}:'../../images/user.png'" width="48" height="48"
+												alt="User" />
+										</div>
+									</div>
+									<div class="col-md-11" id="mytest">
+										<div class="row">
+											<span style="color: blue;" th:text="${userService.findUserByUserID(communication.replyUserID).name}"></span> 回复  
+											<span style="color: blue;" th:text="${userService.findUserByUserID(communication.userID).name}"></span>:
+											<span th:text="${communication.communicationContext}"></span><br>
+											<span th:text="${#dates.format(communication.time,'yyyy-MM-dd')}"></span>
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-11"></div>
+									<div class="col-md-1">
+										<a th:onclick="'javascript:openModal('+${comment.commentID}+','+${communication.replyUserID}+');'">回复</a>
+									</div>
+								</div>
+								<!-- 一个交流区结束 -->
+								<hr class="my-4">
+								</div>
+								<!-- 对该回答发起的comment 结束  -->
+							</div>
+						</div>
+						<!-- answer 区结束 -->
+
+						<!-- 答复区域结束 -->
+					</div>
+							<script th:inline="javascript">
+								var userID = [[${session.User.userID}]];
+								function addLike(flag,id,commentID){
+									if(flag==0){
+										$.ajax({
+											url : "/like/add",
+											type : "get",
+											data : {
+												"userID" : userID,
+												"commentID" : commentID
+											},
+											success : function(data) {
+												//$("#count"+ id).text(parseInt($("#count"+ id).text())+1);
+												window.location.reload();
+											}
+										});
+									} else {
+										alert("你已经给该评论点过赞了！")
+									}
+								}
+								function deleteLike(flag,id,commentID){
+									if(flag==1){
+										$.ajax({
+											url : "/like/delete",
+											type : "get",
+											data : {
+												"userID" : userID,
+												"commentID" : commentID
+											},
+											success : function(data) {
+												//$("#count"+ id).text(parseInt($("#count"+ id).text())-1);
+												window.location.reload();
+											}
+										});
+									} else {
+										alert("你没有给该评论点赞，无法取消！")
+									}
+								}
+							</script>
+<!-- 模态框（Modal） 交流弹框-->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog" style="width:500px">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	                <h4 class="modal-title" style="text-align: left;">回复区</h4>
+	            </div>
+	            <div class="modal-body">
+	            	<input type="hidden" id="commentID">
+	            	<input type="hidden" id="userID">
+	            	<input type="text"  class="form-control" id="communicationContext">
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+	                <button type="button" class="btn btn-default" onclick="addCommunication()">回复</button>
+	            </div>
+	        </div><!-- /.modal-content -->
+	    </div><!-- /.modal -->
+	</div>
+	<script th:inline="javascript">
+		var replyUserID = [[${session.User.userID}]];
+		function openModal(commentID,userID){
+			$('#myModal').modal('show');
+			$('#commentID').val(commentID);
+			$('#userID').val(userID);
+		}
+		
+		function addCommunication() {
+			if ($("#communicationContext").val()) {
+				$.ajax({
+					url : "/communication/add",
+					type : "post",
+					data : {
+						"commentID" : $("#commentID").val(),
+						"userID" : $("#userID").val(),
+						"replyUserID" : replyUserID,
+						"communicationContext" : $("#communicationContext").val(),
+						"time" : new Date()
+					},
+					success : function(data) {
+						//alert(data);
+						window.location.reload();
+					}
+				});
+			}
+		}
+	
+	</script>
+					<!-- 右侧区域开始 -->
+					<div class="col-md-2 text-center">
+						<div class="row">
+							<div class="col-md-4 text-center">
+								<p class="card-inside-title" style="color: blue;"><b>提问时间</b></p>
+							</div>
+							<div class="col-md-8 text-center">
+								<p class="card-inside-title"
+									th:text="${#dates.format(article.uploadTime,'yyyy-MM-dd')}"></p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4 text-center">
+								<p class="card-inside-title " style="color: #04FB04;"><b>浏览次数</b></p>
+							</div>
+							<div class="col-md-8 text-center">
+								<p class="card-inside-title " th:text="${article.count}"></p>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4 text-center">
+								<p class="card-inside-title " style="color:red;"><b>最近活跃时间</b></p>
+							</div>
+							<div class="col-md-8 text-center">
+								<span class="card-inside-title " th:text="${time}"></span><span>天以前</span>
+							</div>
+						</div>
+
+					</div>
+					<!-- 右侧区域结束 -->
+				</div>
+
+				<script type="text/javascript" th:src="@{/editor/lib/marked.min.js}"></script>
+				<script type="text/javascript"
+					th:src="@{/editor/lib/prettify.min.js}"></script>
+				<script type="text/javascript" th:src="@{/editor/editormd.min.js}"></script>
+				<script type="text/javascript">
+					editormd.markdownToHTML("content");
+				</script>
+			</div>
+
+
+			<div class="panel-footer">
+				<hr class="my-4">
+				<h5 class="card-header">
+					<i class="fa fa-comments" aria-hidden="true"></i> 写下你的答案
+				</h5>
+
+
+				<!-- markdown编辑器开始 -->
+				<div id="test-editormd">
+					<textarea style="display: none;" id="commentContext"
+						name="commentContext"></textarea>
+					第二个隐藏文本域，用来构造生成的HTML代码，方便表单POST提交，这里的name可以任意取，后台接受时以这个name键为准
+					<textarea id="commentContextHTML" class="editormd-html-textarea"
+						name="commentContextHTML"></textarea>
+				</div>
+
+				<!-- 模态框（Modal）上传文件 -->
+				<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+					aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h6 class="modal-title" id="myModalLabel">
+									<strong>添加文件</strong>
+								</h6>
+								<button type="button" class="close" data-dismiss="modal"
+									aria-hidden="true">&times;</button>
+							</div>
+
+							<div class="modal-body">
+								<form id="excelForm" class="form-inline">
+									<div class="form-group col-md-12">
+										<label class="control-label md-file-lable">文件名称</label> <input
+											type="text" id="text" class="md-file-text"
+											style="float: left"> <label for="file">
+											<div id="upfile" class="md-file-button" type="button">选择文件</div>
+										</label> <input type="file" name="editormd-image-file" id="file"
+											style="display: none">
+									</div>
+								</form>
+							</div>
+							<div class="modal-footer" style="border-top: 0px">
+								<button type="button" class="btn btn-default" onclick="upload()">上传</button>
+								<button type="button" class="btn btn-default"
+									data-dismiss="modal">关闭</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- markdown编辑器结束 -->
+
+				<hr>
+				<div>
+
+					<hr class="my-4">
+					<div class="card-body" style="text-align: center;">
+						<input type="hidden" id="user" th:value="${session.User.userID}" />
+						<input type="hidden" id="articleID"
+							th:value="${article.articleID}" />
+						<button data-student-id="userId" data-question-id="questionId"
+							id="commentSubmit" class="btn btn-primary">提交答案</button>
+					</div>
+					<div class="card-footer text-muted">
+						<hr class="my-4">
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script type="text/javascript">
+		$('#commentSubmit').on('click',function(){
+			if($("#commentContextHTML").val()){
+				$.ajax({
+					url : "/comment/add",
+					type : "post",
+					data : {
+						"userID" : $("#user").val(),
+						"articleID" : $("#articleID").val(),
+						"commentContext" : $("#commentContextHTML").val(),
+						"commentTime" : new Date(),
+						"remarks" : ""
+					},
+					success : function(data) {
+						alert(data);
+						window.location.reload();
+					}
+				});
+			}
+		});
+	</script>
+
+	<!-- MD编辑器 -->
+	<script type="text/javascript" th:src="@{/js/replyMD.js}"></script>
+
+	<!-- Jquery Core Js -->
+	<script src="../../plugins/jquery/jquery.min.js"></script>
+
+	<!-- Bootstrap Core Js -->
+	<script src="../../plugins/bootstrap/js/bootstrap.js"></script>
+
+	<!-- Select Plugin Js -->
+	<script src="../../plugins/bootstrap-select/js/bootstrap-select.js"></script>
+
+	<!-- Slimscroll Plugin Js -->
+	<script src="../../plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+
+	<!-- Waves Effect Plugin Js -->
+	<script src="../../plugins/node-waves/waves.js"></script>
+
+	<!-- Ckeditor -->
+	<script src="../../plugins/ckeditor/ckeditor.js"></script>
+
+	<!-- TinyMCE -->
+	<script src="../../plugins/tinymce/tinymce.js"></script>
+
+	<!-- Custom Js -->
+	<script src="../../js/admin.js"></script>
+	<script src="../../js/pages/forms/editors.js"></script>
+
+	<!-- Demo Js -->
+	<script src="../../js/demo.js"></script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nchu.software.mapper.EvaluateMapper">
+	
+    <insert id="insertEvaluate" parameterType="cn.edu.nchu.software.entity.EvaluateEntity">
+    	insert into evaluate values (null,#{codeID},#{userID},#{evaluateContext},#{grade},#{evaluateTime})
+    </insert>
+    
+    <select id="listEvaluateByCodeID" resultType="cn.edu.nchu.software.entity.EvaluateEntity">
+    	select * from evaluate where codeID = #{codeID} order by evaluateTime desc
+    </select>
+    
+    <select id="countByGrade" resultType="int">
+    	select COUNT(*) from evaluate where codeID = #{codeID} and grade = #{grade}
+    </select>
+    
+    <select id="listEvaluateCountByCodeID" resultType="int">
+    	select COUNT(*) from evaluate where codeID = #{codeID}
+    </select>
+	
+</mapper>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>代码详情</title>
+
+<!-- Favicon-->
+<link rel="icon" href="../../favicon.ico" type="image/x-icon">
+
+<!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+
+    <!-- Bootstrap Core Css -->
+    <link rel="stylesheet" th:href="@{/plugins/bootstrap/css/bootstrap.css}"/>
+
+    <!-- Waves Effect Css -->
+    <link rel="stylesheet" th:href="@{/plugins/node-waves/waves.css}"/>
+    
+    <!-- Bootstrap Tagsinput Css -->
+    <link rel="stylesheet" th:href="@{/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css}"/>
+
+    <!-- Animation Css -->
+    <link rel="stylesheet" th:href="@{/plugins/animate-css/animate.css}"/>
+
+    <!-- Custom Css -->
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link rel="stylesheet" th:href="@{/css/themes/all-themes.css}"/>
+    
+	 <script type="text/javascript" th:src="@{/plugins/jquery/jquery.min.js}"></script>
+	 
+	 <link rel="stylesheet" th:href="@{/editor/css/editormd.preview.min.css}" />
+	 <link rel="stylesheet" th:href="@{/editor/css/editormd.css}" />
+</head>
+<body>
+	<!-- Top Bar -->
+    <div th:replace="topbar :: topbar"  ></div>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <div th:replace="menu :: menu"  ></div>
+        <!-- #END# Left Sidebar -->
+        <!-- Right Sidebar -->
+       	<div th:replace="right :: right"  ></div>
+        <!-- #END# Right Sidebar -->
+    </section>
+
+
+	<section class="content">
+
+		<div class="panel panel-default panel-post">
+			<div class="panel-heading">
+				<div class="media" style="float: left">
+					<div class="media-left">
+						<a href="#"> <img th:src="(${userService.findUserByUserID(code.userID).picture} ne null)?${userService.findUserByUserID(code.userID).picture}:'../../images/user-lg.jpg'" />
+						</a>
+					</div>
+					<div class="media-body">
+
+						<h4 class="media-heading">
+							<a href="#" th:text="${userService.findUserByUserID(code.userID).name}"></a>
+						</h4>
+						<div th:text="'发表日期：' + ${#dates.format(code.uploadTime,'yyyy-MM-dd')} + '&nbsp;&nbsp;&nbsp;&nbsp;阅读次数：' + ${code.count}" style="float: left;margin-right: 50px"></div>
+						<!-- 关键字 -->
+							<span th:if="${code.keyword ne null}" th:each="keyword,keywordStat : ${htmlUtil.splitString(code.keyword)}" th:class="${keyword.key}" th:text="${keyword.value}" style="margin-right: 20px"></span>
+					</div>
+				</div>
+				<div align="center">
+					<h1 class="card-inside-title" th:text="${code.codeTitle}"></h1>
+				</div>
+			</div>
+			<div class="panel-body">
+				<div class="container">
+					<div class="row">
+						<div class="content" id="content">
+						<button type="button" class="btn btn-block btn-lg btn-info waves-effect" onclick="copyCode()">COPY</button>
+						
+						
+						<script type="text/javascript">
+						
+						function copyCode(){
+							var codeContext =  $("#codeContext").text();
+				            if(window.clipboardData){
+				            	alert("复制失败！");
+				            } else {
+				                 (function(codeContext){
+				                       document.oncopy=function(e){
+				                            e.clipboardData.setData('text',codeContext);
+				                            e.preventDefault();
+				                            document.oncopy=null;
+				                        }
+				                    })(codeContext);
+				                    document.execCommand('Copy');
+				                    alert("复制成功！");
+				            }
+				       	}
+							
+						</script>
+							<pre id="codeContext" th:text="${code.codeContext}"></pre>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+		
+	</section>
+	<!-- Jquery Core Js -->
+	<script src="../../plugins/jquery/jquery.min.js"></script>
+
+	<!-- Bootstrap Core Js -->
+	<script src="../../plugins/bootstrap/js/bootstrap.js"></script>
+
+	<!-- Select Plugin Js -->
+	<script src="../../plugins/bootstrap-select/js/bootstrap-select.js"></script>
+
+	<!-- Slimscroll Plugin Js -->
+	<script src="../../plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+
+	<!-- Waves Effect Plugin Js -->
+	<script src="../../plugins/node-waves/waves.js"></script>
+
+	<!-- Ckeditor -->
+	<script src="../../plugins/ckeditor/ckeditor.js"></script>
+
+	<!-- TinyMCE -->
+	<script src="../../plugins/tinymce/tinymce.js"></script>
+
+	<!-- Custom Js -->
+	<script src="../../js/admin.js"></script>
+	<script src="../../js/pages/forms/editors.js"></script>
+
+	<!-- Demo Js -->
+	<script src="../../js/demo.js"></script>
+</body>
+</html>

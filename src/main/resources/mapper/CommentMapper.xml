@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nchu.software.mapper.CommentMapper">
+	
+    <insert id="insertComment" parameterType="cn.edu.nchu.software.entity.CommentEntity">
+    	insert into comment values (null,#{userID},#{articleID},#{commentContext},#{commentTime},#{remarks},#{myLike})
+    </insert>
+    
+    <select id="listCommentByArticleID" resultType="cn.edu.nchu.software.entity.CommentEntity">
+    	select * from comment where articleID = #{articleID} order by myLike desc
+    </select>
+    
+    <select id="listCommentCountByArticleID" resultType="int">
+    	select COUNT(*) from comment where articleID = #{articleID}
+    </select>
+	
+	<update id="updateRemarksByCommentID">
+		update comment set remarks = #{remarks}  where commentID = #{commentID} 
+	</update>
+	
+	<select id="newCommentByArticleID" resultType="date">
+    	select commentTime from comment where articleID = #{articleID} order by commentTime desc limit 1
+    </select>
+</mapper>

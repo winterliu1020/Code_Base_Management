@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<title th:text="${title} + '展示'"></title>
+
+<!-- Favicon-->
+<link rel="icon" href="../favicon.ico" type="image/x-icon">
+
+<!-- Google Fonts -->
+<link
+	href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext"
+	rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet" type="text/css">
+
+<!-- Bootstrap Core Css -->
+<link rel="stylesheet" th:href="@{/plugins/bootstrap/css/bootstrap.css}" />
+
+<!-- Waves Effect Css -->
+<link rel="stylesheet" th:href="@{/plugins/node-waves/waves.css}" />
+
+<!-- Animation Css -->
+<link rel="stylesheet" th:href="@{/plugins/animate-css/animate.css}" />
+
+<!-- Custom Css -->
+<link rel="stylesheet" th:href="@{/css/style.css}" />
+<!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+<link rel="stylesheet" th:href="@{/css/themes/all-themes.css}" />
+
+<!-- 用于评级用的星星jQuery -->
+<link
+	href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css"
+	rel="stylesheet">
+<link href="/css/star-rating.min.css" media="all" rel="stylesheet"
+	type="text/css" />
+<script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
+<script src="/js/star-rating.min.js" type="text/javascript"></script>
+
+</head>
+
+<body class="theme-red">
+	<!-- Top Bar -->
+	<div th:replace="topbar :: topbar"></div>
+	<!-- #Top Bar -->
+	<section>
+		<!-- Left Sidebar -->
+		<div th:replace="menu :: menu" id="menu"></div>
+		<!-- #END# Left Sidebar -->
+		<!-- Right Sidebar -->
+		<div th:replace="right :: right"></div>
+		<!-- #END# Right Sidebar -->
+	</section>
+
+	<section class="content" style="margin-top: 30px;">
+		<div class="container-fluid">
+
+			<div class="block-header">
+				<span class="font-50" th:text="${title} + '展示区'"></span>
+			</div>
+			<!-- Body Copy -->
+			<div class="row clearfix">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div th:each="article,articleStat : ${articles}" class="card">
+						<div class="header"
+							th:onclick="'javascript:showArticle('+${article.articleID}+');'">
+							<!-- 标题 -->
+							<a style="margin-right: 20px"><span id="code-title"
+								class="font-32" th:text="${article.articleTitle}"></span></a>
+							<!-- 类型 -->
+							<span id="code-type" class="font-20"
+								th:text="${typeService.findTypeByTypeID(article.typeID).typeContext}"></span>
+							<!-- 灰色竖直线 -->
+							<span
+								style="height: 50px; border: 1px solid #9E9E9E; margin-right: 10px; margin-left: 10px;"></span>
+							<!-- 发布日期 -->
+							<span id="code-type" class="font-20"
+								th:text="${#dates.format(article.uploadTime,'yyyy-MM-dd')}"></span>
+							<!-- 灰色竖直线 -->
+							<span
+								style="height: 50px; border: 1px solid #9E9E9E; margin-right: 10px; margin-left: 10px;"></span>
+
+							<!-- 阅读数 -->
+							<span>阅读数 </span> <span id="code-type" class="font-20"
+								style="margin-right: 60px" th:text="${article.count}"></span>
+							<!-- 关键字 -->
+							<span th:if="${article.keyword ne null}"
+								th:each="keyword,keywordStat : ${htmlUtil.splitString(article.keyword)}"
+								th:class="${keyword.key}" th:text="${keyword.value}"
+								style="margin-right: 10px"></span>
+						</div>
+						<div class="body"
+							th:onclick="'javascript:showArticle('+${article.articleID}+');'">
+							<p class="lead" style="font-size: 15px"
+								th:text="${htmlUtil.htmlToText(article.articleContext)}"></p>
+						</div>
+						<div class="panel-footer">
+							<div style="text-align: right; margin: 0px auto 0px auto;">
+								<span> <i class="material-icons"
+									th:onclick="'javascript:copyToClipboard('+${article.articleID}+');'">share</i>
+								</span> <span>分享</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div style="text-align: center;">
+			<ul class="pagination">
+				<li><a style="height: 34px" th:if="${pages.pageNum} ne 1"
+					th:href="'/article/list/' + ${articleType} + '/' + ${type} + '?pagenum='+${pages.pageNum-1}">&laquo;</a>
+				</li>
+				<li><a th:if="${pages.pageNum} gt 5"
+					th:href="'/article/list/' + ${articleType} + '/' + ${type} + '?pagenum='+${pages.pageNum-5}">...</a>
+				<li>
+				<li th:each="i : ${pages.pageBeginToEnd}"
+					th:class="(${i} eq ${pages.pageNum})?'active':''"><a
+					th:href="'/article/list/' + ${articleType} + '/' + ${type} + '?pagenum='+${i}"
+					th:text="${i}"></a></li>
+				<li><a th:if="${pages.pageNumAll} ge ${pages.pageNum+5}"
+					th:href="'/article/list/' + ${articleType} + '/' + ${type} + '?pagenum='+${pages.pageNum+5}">...</a>
+				<li>
+				<li><a style="height: 34px"
+					th:if="${pages.pageNum} lt ${pages.pageNumAll}"
+					th:href="'/article/list/' + ${articleType} + '/' + ${type} + '?pagenum='+${pages.pageNum+1}">&raquo;</a>
+				</li>
+			</ul>
+		</div>
+	</section>
+	<script th:inline="javascript">
+					    var articleType = [[${articleType}]];
+					    function showArticle(articleID){
+					    	window.open('/article/' + articleType + '/' + articleID);
+                        }
+					    function  copyToClipboard(articleID){
+                            if(window.clipboardData){
+                            	alert("复制失败！");
+                            } else {
+                                 (function(articleID){
+                                       document.oncopy=function(e){
+                                            e.clipboardData.setData('text',"http://localhost:8080/article/" + articleType + "/" + articleID);
+                                            e.preventDefault();
+                                            document.oncopy=null;
+                                        }
+                                    })(articleID);
+                                    document.execCommand('Copy');
+                                    alert("复制成功！");
+                            }
+                       }
+					    
+		var type = [[${type}]];	    
+	    if(articleType){
+	    	$('#browse').show();
+	    	$('#a'+articleType).show();
+	    	$("#a"+articleType+""+type).css({"color":"blue","font-size":"18px"});
+	    }
+	 </script>
+	<!-- Jquery Core Js -->
+	<script src="/plugins/jquery/jquery.min.js"></script>
+	<!-- Bootstrap Core Js -->
+	<script src="/plugins/bootstrap/js/bootstrap.js"></script>
+
+	<!-- Select Plugin Js -->
+	<script src="/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+
+	<!-- Slimscroll Plugin Js -->
+	<script src="/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+
+	<!-- Waves Effect Plugin Js -->
+	<script src="/plugins/node-waves/waves.js"></script>
+
+	<!-- Custom Js -->
+	<script src="/js/admin.js"></script>
+
+	<!-- Demo Js -->
+	<script src="/js/demo.js"></script>
+
+</body>
+
+</html>

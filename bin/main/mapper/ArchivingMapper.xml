@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nchu.software.mapper.ArchivingMapper">
+	
+    <insert id="insertArchiving" parameterType="cn.edu.nchu.software.entity.ArchivingEntity">
+    	insert into archiving values (null,#{userID},#{codeID},#{remarks},#{archivingTime})
+    </insert>
+    
+    <select id="findArchivingByUserIDCodeID" resultType="cn.edu.nchu.software.entity.ArchivingEntity">
+    	select * from archiving where userID = #{userID} and codeID = #{codeID}
+    </select>
+	
+	<delete id="deleteArchivingByUserIDCodeID" parameterType="int">
+    	delete from archiving where userID = #{userID} and codeID = #{codeID}
+    </delete>
+    
+    <select id="listArchivingByUserID" resultType="cn.edu.nchu.software.entity.ArchivingEntity">
+    	select codeID from archiving where userID = #{userID} order by archivingTime desc
+    </select>
+</mapper>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nchu.software.mapper.CommunicationMapper">
+	
+    <insert id="insertCommunication" parameterType="cn.edu.nchu.software.entity.CommunicationEntity">
+    	insert into communication values (null,#{commentID},#{userID},#{replyUserID},#{communicationContext},#{time})
+    </insert>
+    
+    <select id="listCommunicationByCommentID" resultType="cn.edu.nchu.software.entity.CommunicationEntity">
+    	select * from communication where commentID = #{commentID} order by time asc
+    </select>
+	
+</mapper>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>教程展示</title>
+
+<!-- Favicon-->
+<link rel="icon" href="../../favicon.ico" type="image/x-icon">
+
+<!-- Google Fonts -->
+<link
+	href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext"
+	rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet" type="text/css">
+
+<!-- Bootstrap Core Css -->
+<link rel="stylesheet" th:href="@{/plugins/bootstrap/css/bootstrap.css}" />
+
+<!-- Waves Effect Css -->
+<link rel="stylesheet" th:href="@{/plugins/node-waves/waves.css}" />
+
+<!-- Bootstrap Tagsinput Css -->
+<link rel="stylesheet"
+	th:href="@{/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css}" />
+
+<!-- Animation Css -->
+<link rel="stylesheet" th:href="@{/plugins/animate-css/animate.css}" />
+
+<!-- Custom Css -->
+<link rel="stylesheet" th:href="@{/css/style.css}" />
+
+<!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+<link rel="stylesheet" th:href="@{/css/themes/all-themes.css}" />
+
+<script type="text/javascript" th:src="@{/plugins/jquery/jquery.min.js}"></script>
+
+<link rel="stylesheet" th:href="@{/editor/css/editormd.preview.min.css}" />
+<link rel="stylesheet" th:href="@{/editor/css/editormd.css}" />
+
+</head>
+<body>
+	<!-- Top Bar -->
+	<div th:replace="topbar :: topbar"></div>
+	<!-- #Top Bar -->
+	<section>
+		<!-- Left Sidebar -->
+		<div th:replace="menu :: menu"></div>
+		<!-- #END# Left Sidebar -->
+		<!-- Right Sidebar -->
+		<div th:replace="right :: right"></div>
+		<!-- #END# Right Sidebar -->
+	</section>
+
+
+	<section class="content">
+
+		<div class="panel panel-default panel-post">
+			<div class="panel-heading">
+				<div class="media" style="float: left">
+					<div class="media-left">
+						<a href="#"> <img th:src="(${userService.findUserByUserID(article.userID).picture} ne null)?${userService.findUserByUserID(article.userID).picture}:'../../images/user-lg.jpg'" />
+						</a>
+					</div>
+					<div class="media-body">
+
+						<h4 class="media-heading">
+							<a href="#" th:text="${userService.findUserByUserID(article.userID).name}"></a>
+						</h4>
+						<div th:text="'发表日期：' + ${#dates.format(article.uploadTime,'yyyy-MM-dd')} + '&nbsp;&nbsp;&nbsp;&nbsp;阅读次数：' + ${article.count}" style="float: left;margin-right: 50px"></div>
+						<!-- 关键字 -->
+							<span th:if="${article.keyword ne null}" th:each="keyword,keywordStat : ${htmlUtil.splitString(article.keyword)}" th:class="${keyword.key}" th:text="${keyword.value}" style="margin-right: 20px"></span>
+					</div>
+				</div>
+				<div align="center">
+					<h1 class="card-inside-title" th:text="${article.articleTitle}"></h1>
+				</div>
+			</div>
+			<div class="panel-body">
+				<!-- 因为我们使用了dark主题，所以在容器div上加上dark的主题类，实现我们自定义的代码样式 -->
+				<div class="container">
+					<div class="row">
+						<div class="content editormd-preview-theme" id="content"
+							th:utext="${article.articleContext}"></div>
+					</div>
+				</div>
+				<script type="text/javascript" th:src="@{/editor/lib/marked.min.js}"></script>
+				<script type="text/javascript"
+					th:src="@{/editor/lib/prettify.min.js}"></script>
+				<script type="text/javascript" th:src="@{/editor/editormd.min.js}"></script>
+				<script type="text/javascript">
+					editormd.markdownToHTML("content");
+				</script>
+			</div>
+			<div class="panel-footer">
+				<hr>
+				<div>
+					<h5 class="card-header">
+						<i class="fa fa-comments" aria-hidden="true"></i> 评论
+					</h5>
+					<hr class="my-4">
+					<div class="card-body">
+						<div class="card-title">
+							<i class="fa fa-github" aria-hidden="true" th:text="${session.User.name}"></i>
+						</div>
+						<div class="form-group">
+							<input type="text" class="form-control" id="commentPublish"
+								aria-describedby="emailHelp" placeholder="对题目有看法？写下你的评论">
+						</div>
+						<input type="hidden" id="user" th:value="${session.User.userID}"/>
+						<input type="hidden" id="articleID" th:value="${article.articleID}"/>
+						<button data-student-id="userId" data-question-id="questionId"
+							id="commentSubmit" class="btn btn-primary">发表评论</button>
+					</div>
+					
+					<script th:inline="javascript">
+						$('#commentSubmit').on('click',function(){
+							if($("#commentPublish").val()){
+								$.ajax({
+									url : "/comment/add",
+									type : "post",
+									data : {
+										"userID" : $("#user").val(),
+										"articleID" : $("#articleID").val(),
+										"commentContext" : $("#commentPublish").val(),
+										"commentTime" : new Date(),
+										"remarks" : ""
+									},
+									success : function(data) {
+										alert(data);
+										window.location.reload();
+									}
+								});
+							}
+						});
+						
+						function myLike(id,commentID){
+							var userID = [[${session.User.userID}]];
+							var c = $("#like"+ id).attr("class");
+							if(c == "likeHeart fa fa-heart-o"){
+								$.ajax({
+									url : "/like/add",
+									type : "get",
+									data : {
+										"userID" : userID,
+										"commentID" : commentID
+									},
+									success : function(data) {
+										//alert(data);
+										$("#like"+ id).attr("class","likeHeart fa fa-heart");
+										$("#count"+ id).text(parseInt($("#count"+ id).text())+1);
+									}
+								});
+							}
+							if(c == "likeHeart fa fa-heart"){
+								$.ajax({
+									url : "/like/delete",
+									type : "get",
+									data : {
+										"userID" : userID,
+										"commentID" : commentID
+									},
+									success : function(data) {
+										$("#like"+ id).attr("class","likeHeart fa fa-heart-o");
+										$("#count"+ id).text(parseInt($("#count"+ id).text())-1);
+									}
+								});
+							}
+							
+						}
+					</script>
+					
+					<div class="card-footer text-muted">
+						<hr class="my-4">
+						<div class="commentList">
+						
+							<div th:each = "comment,commentStat : ${comments}">
+								<div class="commentBox">
+									<span class="name"> <i class="fa fa-github"
+										aria-hidden="true"><b th:text="${userService.findUserByUserID(comment.userID).name} + '&nbsp; &nbsp;'"></b></i></span> 
+									<span class="date" th:text="${#dates.format(comment.commentTime,'yyyy-MM-dd')} +'&nbsp;&nbsp;'"><b></b></span> 
+									<span class="like"> 
+										<i th:onclick="'javascript:myLike('+${commentStat.index}+','+${comment.commentID}+');'" th:id="'like' + ${commentStat.index}"
+										 th:class="(${myLikeService.findMyLike(session.User.userID,comment.commentID)} eq null)?'likeHeart fa fa-heart-o':'likeHeart fa fa-heart'" aria-hidden="true"></i> 
+										<span><b th:id="'count' + ${commentStat.index}" th:text="${comment.myLike} + '&nbsp; &nbsp;'"></b></span> <!-- 点赞次数 -->
+									</span>
+								</div>
+								<div class="commentContent" th:text="${comment.commentContext}"></div>
+								<hr class="my-4">
+							</div>
+							
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</section>
+	<!-- Jquery Core Js -->
+	<script src="../../plugins/jquery/jquery.min.js"></script>
+
+	<!-- Bootstrap Core Js -->
+	<script src="../../plugins/bootstrap/js/bootstrap.js"></script>
+
+	<!-- Select Plugin Js -->
+	<script src="../../plugins/bootstrap-select/js/bootstrap-select.js"></script>
+
+	<!-- Slimscroll Plugin Js -->
+	<script src="../../plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+
+	<!-- Waves Effect Plugin Js -->
+	<script src="../../plugins/node-waves/waves.js"></script>
+
+	<!-- Ckeditor -->
+	<script src="../../plugins/ckeditor/ckeditor.js"></script>
+
+	<!-- TinyMCE -->
+	<script src="../../plugins/tinymce/tinymce.js"></script>
+
+	<!-- Custom Js -->
+	<script src="../../js/admin.js"></script>
+	<script src="../../js/pages/forms/editors.js"></script>
+
+	<!-- Demo Js -->
+	<script src="../../js/demo.js"></script>
+</body>
+</html>

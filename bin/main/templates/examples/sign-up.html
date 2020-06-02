@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>注册</title>
+    <!-- Favicon-->
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+
+    <!-- Bootstrap Core Css -->
+    <link href="/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Waves Effect Css -->
+    <link href="/plugins/node-waves/waves.css" rel="stylesheet" />
+
+    <!-- Animation Css -->
+    <link href="/plugins/animate-css/animate.css" rel="stylesheet" />
+
+    <!-- Custom Css -->
+    <link href="/css/style.css" rel="stylesheet">
+    
+    <link rel="stylesheet" th:href="@{/css/uploadfile.css}" />
+    <style type="text/css">
+    	.getgold_top_head_img{
+		    height: 60px;
+		    width: 60px;
+		    border-radius:50%;
+		    -webkit-border-radius:50%;
+		    -moz-border-radius:50%;
+		    margin-top: 15px;
+		}
+    </style>
+</head>
+
+<body class="signup-page">
+    <div class="signup-box">
+        <div class="logo">
+           <a><b>教学代码库管理系统</b></a>
+            <small></small>
+        </div>
+        <div class="card">
+            <div class="body">
+                <form id="sign_up" method="post" action="/register">
+                 	<div class="input-group" style="text-align: center;">
+							<img id="tupian" class="getgold_top_head_img" src="/images/user-lg.jpg" title="更改头像" data-toggle="modal" data-target="#myModal"/>
+							<input type="hidden" id="picture" name="picture" value="/images/user-lg.jpg">
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">person</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="姓名" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">portrait</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="text" class="form-control" id="username" name="username" minlength="6" placeholder="账户" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">lock</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="password" class="form-control" id="password" name="password" minlength="6" placeholder="密码" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">lock</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="password" class="form-control" id="confirm" name="confirm" minlength="6" placeholder="确认密码" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">email</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="email" class="form-control" id="email" name="email" placeholder="邮箱" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+	                    <input name="userType" type="radio" id="studentInModel" value="3"/>
+		                <label for="studentInModel">学生</label>
+	                    <input name="userType" type="radio" id="teacherInModel" value="2"/>
+		                <label for="teacherInModel">教师</label>
+		                <!-- <input name="userType" type="radio" id="adminInModel" value="1"/>
+		                <label for="adminInModel">管理员</label> -->
+                    </div>
+                    <div class="form-group">
+                    	<input type="hidden" name="state" value="1">
+                        <input type="checkbox" name="terms" id="terms" class="filled-in chk-col-pink">
+                        <label for="terms">我阅读并同意 <a href="javascript:void(0);">使用条款</a></label>
+                    </div>
+
+                    <button class="btn btn-block btn-lg bg-pink waves-effect" type="submit">注册</button>
+                    <div class="m-t-25 m-b-5 align-center">
+                        <a href="/">已有账号?</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- 模态框（Modal）上传头像 -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h6 class="modal-title" id="myModalLabel">
+						<strong>添加头像</strong>
+					</h6>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+				</div>
+
+				<div class="modal-body">
+					<form id="excelForm" class="form-inline">
+						<div class="form-group col-md-12">
+							<input type="file" name="editormd-image-file" id="file" 
+							accept="image/gif,image/jpeg,image/jpg,image/png,image/svg">
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer" style="border-top: 0px">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-default" onclick="upload()">更换</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script th:inline="javascript">
+	    var message = [[${message}]];
+	    if(message){
+	    	alert(message);
+	    }
+	    function upload() {
+	    	var file = $("#file").val();
+	    	if (file == null || file == "") {
+	    		alert("请选择图片！");
+	    	} else {
+	    		var data = new FormData($('#excelForm')[0]);
+	    		$.ajax({
+	    			type : "post",
+	    			url : "/file?guid=" + (new Date()).getTime(),
+	    			data : data,
+	    			cache: false,
+	    			processData : false, // 不序列化数据
+	    			contentType : false, // multipart request
+	    			success : function(data) {
+	    				var url = data.url.substring(data.url.indexOf("u") - 1);
+	    				$('#tupian').attr('src', url);
+	    				$('#picture').val(url);
+	    				$('#myModal').modal('hide');
+	    			},
+	    			error : function(data) {
+	    				alert("更换失败！");
+	    			}
+	    		});
+	    	}
+	    }
+	 </script>
+	 
+	 <script src="/js/uploadImage.js"></script>
+	 
+    <!-- Jquery Core Js -->
+    <script src="/plugins/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core Js -->
+    <script src="/plugins/bootstrap/js/bootstrap.js"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="/plugins/node-waves/waves.js"></script>
+
+    <!-- Validation Plugin Js -->
+    <script src="/plugins/jquery-validation/jquery.validate.js"></script>
+
+    <!-- Custom Js -->
+    <script src="/js/admin.js"></script>
+    <script src="/js/pages/examples/sign-up.js"></script>
+</body>
+
+</html>

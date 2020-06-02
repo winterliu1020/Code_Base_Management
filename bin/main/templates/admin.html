@@ -1,0 +1,316 @@
+﻿<!DOCTYPE html>
+<html  lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>用户管理</title>
+    <!-- Favicon-->
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+
+    <!-- Bootstrap Core Css -->
+    <link href="/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Waves Effect Css -->
+    <link href="/plugins/node-waves/waves.css" rel="stylesheet" />
+
+    <!-- Animation Css -->
+    <link href="/plugins/animate-css/animate.css" rel="stylesheet" />
+
+    <!-- Custom Css -->
+    <link href="/css/style.css" rel="stylesheet">
+
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link href="/css/themes/all-themes.css" rel="stylesheet" />
+    
+    <style type="text/css">
+    	.getgold_top_head_img{
+		    height: 50px;
+		    width: 50px;
+		    border-radius:50%;
+		    -webkit-border-radius:50%;
+		    -moz-border-radius:50%;
+		}
+		.table tbody tr td{
+            vertical-align: middle;
+        }
+    </style>
+    
+</head>
+
+<body class="theme-red">
+    
+	<!-- Top Bar -->
+    <div th:replace="topbar :: topbar"  ></div>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <div th:replace="menu :: menu"  ></div>
+        <!-- #END# Left Sidebar -->
+        <!-- Right Sidebar -->
+       	<div th:replace="right :: right"  ></div>
+        <!-- #END# Right Sidebar -->
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+            	<form action="/multipleParametersQuery" method="get">
+           	    <div class="col-md-3 text-center">
+                        <input type="text" class="form-control" name="name" placeholder="姓名" th:value="${name}"/>
+           	    </div>
+           	    <div class="col-md-3 text-center">
+                        <input type="text" class="form-control" name="username" placeholder="账号" th:value="${username}"/>
+           	    </div>
+           	    <div class="col-md-2" style="margin-top: 5px;"> <!-- 下拉框有css冲突,只能改成radio了 -->
+           	    	<input name="userType" type="radio" id="teacher" th:checked="(${userType} eq 2)?'true':'false'" value="2"/>
+                    <label for="teacher">教师</label>
+                    <input name="userType" type="radio" id="student" th:checked="(${userType} eq 3)?'true':'false'" value="3"/>
+                    <label for="student">学生</label>
+                    <input name="userType" type="radio" id="all" th:checked="(${userType} eq 0)?'true':'false'" value="0"/>
+                    <label for="all">所有</label>
+           	    </div>
+           	    <div class="col-md-2">
+           	    	 <button type="submit" class="btn btn-success waves-effect">查找</button>
+           	    </div>
+ 			</form>
+           	</div>
+       </div>
+           	<hr class="my-4">
+            
+            <table class="table table-hover">
+			  <thead>
+			    <tr>
+			      <th scope="col">头像</th>
+			      <th scope="col">姓名</th>
+			      <th scope="col">账户</th>
+			      <th scope="col">用户类型</th>
+			      <th scope="col">邮箱</th>
+			      <th scope="col">操作</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <tr th:each="u,uStat : ${users}">
+			      <td><img class="getgold_top_head_img" th:src="(${u.picture} ne null)?${u.picture}:'/images/user.png'"></td>
+			      <td th:id="'name'+${uStat.index}" th:text="${u.name}"></td>
+			      <td th:id="'username'+${uStat.index}" th:text="${u.username}"></td>
+			      <td th:text="(${u.userType} eq 2)?'教师':'学生'"></td>
+			      <td th:id="'email'+${uStat.index}" th:text="${u.email}"></td>
+			      <td>
+			      	<div class="row">
+                   	    <div class="col-md-1">
+                   	    	<i class="material-icons" data-toggle="modal" data-target="#addUser">add</i>
+                   	    </div>
+                   	    <div class="col-md-1">
+                   	    	<i class="material-icons" th:onclick="'editUser('+${uStat.index}+','+${u.userID}+')'" data-toggle="modal">mode_edit</i>
+                   	    </div>
+                   	    <div class="col-md-1">
+                   	    	<i class="material-icons" th:onclick="'deleteUser('+${u.userID}+')'">delete</i>
+                   	    </div>
+                   	    <div class="col-md-1">
+                   	    	<i class="switch">
+		                        <label><input type="checkbox" th:checked="(${u.state} eq 1)?'false':'true'" 
+		                        th:onclick="'updatetUserKey('+${u.userID}+','+${u.state}+')'">
+		                        <span class="lever switch-col-red"></span></label>
+		                    </i>
+                   	    </div>
+			      	</div>
+			      </td>
+			    </tr>
+			  </tbody>
+			</table>
+			<div th:if="${flag} eq null" style="text-align:center;">
+				<ul class="pagination">
+					<li><a th:if="${pages.pageNum} ne 1"
+						th:href="'/listUser?pagenum='+${pages.pageNum-1}">&laquo;</a></li>
+					<li><a th:if="${pages.pageNum} gt 5"
+						th:href="'/listUser?pagenum='+${pages.pageNum-5}">...</a>
+					<li>
+					<li th:each="i : ${pages.pageBeginToEnd}"
+						th:class="(${i} eq ${pages.pageNum})?'active':''"><a
+						th:href="'/listUser?pagenum='+${i}" th:text="${i}"></a></li>
+					<li><a th:if="${pages.pageNumAll} ge ${pages.pageNum+5}"
+						th:href="'/listUser?pagenum='+${pages.pageNum+5}">...</a>
+					<li>
+					<li><a
+						th:if="${pages.pageNum} lt ${pages.pageNumAll}"
+						th:href="'/listUser?pagenum='+${pages.pageNum+1}">&raquo;</a></li>
+				</ul>
+			</div>
+			
+			<div th:unless="${flag} eq null" style="text-align:center;">
+				<ul class="pagination">
+					<li><a th:if="${pages.pageNum} ne 1"
+						th:href="'/multipleParametersQuery?pagenum='+${pages.pageNum-1}+((${name} eq null)?'':'&name='+${name})+((${username} eq null)?'':'&username='+${username})+((${userType} eq null)?'':'&userType='+${userType})">&laquo;</a></li>
+					<li><a th:if="${pages.pageNum} gt 5"
+						th:href="'/multipleParametersQuery?pagenum='+${pages.pageNum-5}+((${name} eq null)?'':'&name='+${name})+((${username} eq null)?'':'&username='+${username})+((${userType} eq null)?'':'&userType='+${userType})">...</a>
+					<li>
+					<li th:each="i : ${pages.pageBeginToEnd}" th:class="(${i} eq ${pages.pageNum})?'active':''">
+					<a th:href="'/multipleParametersQuery?pagenum='+${i}+((${name} eq null)?'':'&name='+${name})+((${username} eq null)?'':'&username='+${username})+((${userType} eq null)?'':'&userType='+${userType})" th:text="${i}"></a></li>
+					<li><a th:if="${pages.pageNumAll} ge ${pages.pageNum+5}"
+						th:href="'/multipleParametersQuery?pagenum='+${pages.pageNum+5}+((${name} eq null)?'':'&name='+${name})+((${username} eq null)?'':'&username='+${username})+((${userType} eq null)?'':'&userType='+${userType})">...</a>
+					<li>
+					<li><a
+						th:if="${pages.pageNum} lt ${pages.pageNumAll}"
+						th:href="'/multipleParametersQuery?pagenum='+${pages.pageNum+1}+((${name} eq null)?'':'&name='+${name})+((${username} eq null)?'':'&username='+${username})+((${userType} eq null)?'':'&userType='+${userType})">&raquo;</a></li>
+				</ul>
+			</div>
+			  <!-- 按钮触发编添加用户态框 -->
+			<!-- 模态框（Modal） -->
+			<div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<form action="/addUser" method="post">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+								&times;
+							</button>
+							<h4 class="modal-title" id="myModalLabel">
+								添加用户
+							</h4>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+								<input type="text" class="form-control" name="name" placeholder="姓名" />
+			            	</div>
+			            	<br>
+			            	<div class="row">
+								<input type="text" class="form-control" name="username" placeholder="账户" />
+			            	</div>
+			            	<br>
+			            	<div class="row">
+								<input type="text" name="password" class="form-control" placeholder="密码" />
+			            	</div>
+			            	<br>
+			            	<div class="row">
+								<input type="text" class="form-control" name="email" placeholder="邮箱" />
+			            	</div>
+			            	<br>
+			            	<div class="row">
+				           	    	<input name="userType" type="radio" id="teacherInModel" value="2"/>
+				                    <label for="teacherInModel">教师</label>
+				                    <input name="userType" type="radio" id="studentInModel" value="3"/>
+				                    <label for="studentInModel">学生</label>
+			            	</div>		
+						</div>
+						<div class="modal-footer">
+							<input type="hidden" name="state" value="1">
+							<input type="hidden" name="userType">
+							<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+							</button>
+							<button type="submit" class="btn btn-primary">
+								添加
+							</button>
+						</div>
+						</form>
+					</div><!-- /.modal-content -->
+			</div><!-- /.modal -->
+			</div>
+            <script type="text/javascript">
+            	function deleteUser(userID){
+            		$.ajax({
+						url : "/deleteUser/"+userID,
+						type : "get",
+						success : function(data) {
+							alert(data);
+							window.location.reload();
+						}
+            		});
+            	}
+            	
+            	function updatetUserKey(userID,state){
+            		if(state==1){
+						state=0;
+					} else {
+						state=1;
+					}
+            		$.ajax({
+						url : "/updatetUserKey/"+userID+"/"+state,
+						type : "get",
+						success : function(data) {
+							if(state==1){
+								alert('解锁'+data);
+								window.location.reload();
+							} else {
+								alert('加锁'+data);
+								window.location.reload();
+							}
+						}
+            		});
+            	}
+            	function editUser(id,userID){
+            		$('#editName').val($('#name'+id).text());
+            		$('#editUsername').val($('#username'+id).text());
+            		$('#editEmail').val($('#email'+id).text());
+            		$('#editUserID').val(userID);
+            		$('#editUser').modal('show');
+            	}
+            </script>
+            <!-- 按钮触发编辑模态框 -->
+			<!-- 模态框（Modal） -->
+			<div class="modal fade" id="editUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+					<form action="/updatetUser" method="post">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+								&times;
+							</button>
+							<h4 class="modal-title" id="myModalLabel">
+								修改用户信息
+							</h4>
+						</div>
+						<div class="modal-body">
+							<div class="row">
+								<input type="text" id="editName" name="name" class="form-control" placeholder="姓名" />
+			            	</div>
+			            	<br>
+			            	<div class="row">
+								<input type="text" id="editUsername" name="username" class="form-control" placeholder="账户" />
+			            	</div>
+			            	<br>
+			            	<div class="row">
+								<input type="text" id="editEmail" name="email" class="form-control" placeholder="邮箱" />
+			            	</div>
+			            	<br>	
+						</div>
+						<div class="modal-footer">
+							<input type="hidden" id="editUserID" name="userID">
+							<button type="button" class="btn btn-default" data-dismiss="modal">关闭
+							</button>
+							<button type="submit" class="btn btn-primary">
+								提交更改
+							</button>
+						</div>
+						</form>
+					</div><!-- /.modal-content -->
+			</div><!-- /.modal -->
+			</div>
+    </section>
+
+    <!-- Jquery Core Js -->
+    <script src="/plugins/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core Js -->
+    <script src="/plugins/bootstrap/js/bootstrap.js"></script>
+
+    <!-- Select Plugin Js -->
+    <script src="/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+
+    <!-- Slimscroll Plugin Js -->
+    <script src="/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="/plugins/node-waves/waves.js"></script>
+
+    <!-- Custom Js -->
+    <script src="/js/admin.js"></script>
+
+    <!-- Demo Js -->
+    <script src="/js/demo.js"></script>
+</body>
+
+</html>

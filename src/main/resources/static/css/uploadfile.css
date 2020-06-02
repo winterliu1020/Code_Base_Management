@@ -1,0 +1,30 @@
+.md-file-lable {
+	float: left;
+	display: block;
+	width: 75px;
+	text-align: left;
+	padding: 7px 0 15px 5px;
+	margin: 0 0 2px;
+	font-weight: normal;
+}
+
+.md-file-text {
+	float: left;
+	color: #999;
+	padding: 8px;
+	border: 1px solid #ddd;
+	width: 60%;
+}
+
+.md-file-button {
+	float: left;
+	color: #666;
+	cursor: pointer;
+	background: #fff;
+	padding: 7px 10px;
+	border: 1px solid #ddd;
+	margin-bottom: 20px;
+	border-radius: 3px;
+	transition: background 300ms ease-out;
+	margin-bottom: 20px;
+}

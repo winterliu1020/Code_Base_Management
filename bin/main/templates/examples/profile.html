@@ -1,0 +1,636 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<title>个人主页</title>
+<!-- Favicon-->
+<link rel="icon" href="../../favicon.ico" type="image/x-icon">
+
+<!-- Google Fonts -->
+<link
+	href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext"
+	rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet" type="text/css">
+
+<!-- Bootstrap Core Css -->
+<link href="/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+<!-- Waves Effect Css -->
+<link href="/plugins/node-waves/waves.css" rel="stylesheet" />
+
+<!-- Animation Css -->
+<link href="/plugins/animate-css/animate.css" rel="stylesheet" />
+
+<!-- Custom Css -->
+<link href="/css/style.css" rel="stylesheet">
+
+<!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+<link href="/css/themes/all-themes.css" rel="stylesheet" />
+
+<!-- 预加载 -->
+<link href="/css/loader.css" rel="stylesheet" />
+
+</head>
+
+<body class="theme-red">
+	<!-- Top Bar -->
+	<div th:replace="topbar :: topbar"></div>
+	<!-- #Top Bar -->
+	<section>
+		<!-- Left Sidebar -->
+		<div th:replace="menu :: menu"></div>
+		<!-- #END# Left Sidebar -->
+		<!-- Right Sidebar -->
+		<div th:replace="right :: right"></div>
+		<!-- #END# Right Sidebar -->
+	</section>
+
+	<section class="content">
+		<div class="container-fluid">
+			<div class="row clearfix">
+			
+				<div class="col-xs-12 col-sm-3">
+					<div class="card profile-card">
+						<div class="profile-header">&nbsp;</div>
+						<div class="profile-body">
+							<div class="image-area">
+								<img style="width: 150px" th:src="(${session.User.picture} ne null)?${session.User.picture}:'/images/user-lg.jpg'"
+									alt="AdminBSB - Profile Image" />
+							</div>
+							<div class="content-area">
+								<h3 th:text="${session.User.name}"></h3>
+								<span th:switch="${session.User.userType}">
+									<p th:case="1">管理员</p>
+									<p th:case="2">教师</p>
+									<p th:case="*">学生</p>
+								</span>
+							</div>
+						</div>
+						<div class="profile-footer">
+							<ul>
+								<li><span>账号</span> <span th:text="${session.User.username}"></span></li>
+								<li><span>积分</span> <span>78</span></li>
+								<li><span>追随者</span> <span>103</span></li>
+							</ul>
+							<button class="btn btn-primary btn-lg waves-effect btn-block">修改资料</button>
+						</div>
+					</div>
+
+					<div class="card card-about-me">
+						<div class="header">
+							<h2>关于我</h2>
+						</div>
+						<div class="body">
+							<ul>
+								<li>
+									<div class="title">
+										<i class="material-icons">library_books</i>学历
+									</div>
+									<div class="content">南昌航空大学学士学位</div>
+								</li>
+								<li>
+									<div class="title">
+										<i class="material-icons">location_on</i>地址
+									</div>
+									<div class="content">南昌航空大学</div>
+								</li>
+								<li>
+									<div class="title">
+										<i class="material-icons">edit</i>标签
+									</div>
+									<div class="content">
+										<span class="label bg-red">Spring</span> 
+										<span class="label bg-teal">Java</span> 
+										<span class="label bg-amber">WEB</span>
+										<span class="label bg-blue">JavaScript</span> 
+										<span class="label bg-orange">jQuery</span> 
+									</div>
+								</li>
+								<li>
+									<div class="title">
+										<i class="material-icons">notes</i>个人说明
+									</div>
+									<div class="content">一个专注敲代码的程序猿</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-xs-12 col-sm-9">
+					<div class="card">
+						<div class="body">
+							<div>
+								<ul class="nav nav-tabs" role="tablist">
+									<li role="presentation" th:class="(${codeType} eq 1)?'active':''">
+									<a href="/my/code/list/1">代码发布</a></li>
+									<li th:if="${session.User.userType} ne 3" role="presentation" th:class="(${codeType} eq 2)?'active':''">
+									<a href="/my/code/list/2">代码归档</a></li>
+									<li role="presentation" th:class="(${articleType} eq 1)?'active':''"><a href="/my/article/list/1">教程发布</a></li>
+									<li role="presentation" th:class="(${articleType} eq 2)?'active':''"><a href="/my/article/list/2">代码征集</a></li>
+									<li role="presentation" th:class="(${articleType} eq 3)?'active':''"><a href="/my/article/list/3">答疑解惑</a></li>
+								</ul>
+
+								<div class="tab-content">
+
+									<!-- 第一列从这开始-->
+									<div th:if="${articleType eq null}">
+									<div role="tabpanel" class="tab-pane fade in active" th:each="code,codeStat : ${codes}">
+										<div class="panel panel-default panel-post">
+											<div class="header">
+												<!-- 标题 -->
+												<a>
+													<span id="code-title" class="font-32" th:text="${code.codeTitle}"></span>
+												</a>
+												<!-- 类型 -->
+												<span id="code-type" class="font-20" th:text="${typeService.findTypeByTypeID(code.typeID).typeContext}"></span>
+												<!-- 灰色竖直线 -->
+												<span
+													style="height: 50px; border: 1px solid #9E9E9E; margin-right: 10px; margin-left: 10px;"></span>
+												<!-- 发布日期 -->
+												<span id="code-type" class="font-20" th:text="${#dates.format(code.uploadTime,'yyyy-MM-dd')}"></span>
+												<!-- 灰色竖直线 -->
+												<span
+													style="height: 50px; border: 1px solid #9E9E9E; margin-right: 10px; margin-left: 10px;"></span>
+
+												<!-- 阅读数 -->
+												<span>阅读数 </span> <span id="code-type" class="font-20"
+													style="margin-right: 60px" th:text="${code.count}"></span>
+												<!-- 关键字 -->
+												<span th:if="${code.keyword ne null}"
+												th:each="keyword,keywordStat : ${htmlUtil.splitString(code.keyword)}"
+												th:class="${keyword.key}" th:text="${keyword.value}"
+												style="margin-right: 10px"></span>
+												<!-- Tasks -->
+
+												<ul class="dropdown">
+													<a href="javascript:void(0);" class="dropdown-toggle"
+														data-toggle="dropdown" role="button">
+														<h4>
+															<span class="label bg-red" th:text="(${evaluateService.countRecord(code.codeID)} eq 0)?
+															0:${#numbers.formatDecimal(100*evaluateService.countByGrade(code.codeID,5)/evaluateService.countRecord(code.codeID)+
+															80*evaluateService.countByGrade(code.codeID,4)/evaluateService.countRecord(code.codeID)+
+															60*evaluateService.countByGrade(code.codeID,3)/evaluateService.countRecord(code.codeID)+
+															40*evaluateService.countByGrade(code.codeID,2)/evaluateService.countRecord(code.codeID)+
+															20*evaluateService.countByGrade(code.codeID,1)/evaluateService.countRecord(code.codeID),1,0)}"></span>
+														</h4>
+													</a>
+													<ul class="dropdown-menu">
+														<li class="header">用户评价</li>
+														<li class="body">
+															<ul class="menu tasks">
+																<li><a href="javascript:void(0);">
+																		<h4>
+																			五星 <small id="fivestar" th:text="${evaluateService.countByGrade(code.codeID,5)} + '人'"></small>
+																		</h4>
+																		<div class="progress">
+																			<div class="progress-bar bg-pink" role="progressbar"
+																				aria-valuenow="85" aria-valuemin="0"
+																				aria-valuemax="100" th:style="'width:'+((${evaluateService.countRecord(code.codeID)} eq 0)?0:100*${evaluateService.countByGrade(code.codeID,5)}/${evaluateService.countRecord(code.codeID)})+'%'"></div>
+																		</div>
+																</a></li>
+																<li><a href="javascript:void(0);">
+																		<h4>
+																			四星 <small id="fourstar" th:text="${evaluateService.countByGrade(code.codeID,4)} + '人'"></small>
+																		</h4>
+																		<div class="progress">
+																			<div class="progress-bar bg-cyan" role="progressbar"
+																				aria-valuenow="85" aria-valuemin="0"
+																				aria-valuemax="100"th:style="'width:'+((${evaluateService.countRecord(code.codeID)} eq 0)?0:100*${evaluateService.countByGrade(code.codeID,4)}/${evaluateService.countRecord(code.codeID)})+'%'"></div>
+																		</div>
+																</a></li>
+																<li><a href="javascript:void(0);">
+																		<h4>
+																			三星 <small id="threestar" th:text="${evaluateService.countByGrade(code.codeID,3)} + '人'"></small>
+																		</h4>
+																		<div class="progress">
+																			<div class="progress-bar bg-teal" role="progressbar"
+																				aria-valuenow="85" aria-valuemin="0"
+																				aria-valuemax="100" th:text="${evaluateService.countByGrade(code.codeID,3)} + '人'"></div>
+																		</div>
+																</a></li>
+																<li><a href="javascript:void(0);">
+																		<h4>
+																			二星 <small id="twostar" th:text="${evaluateService.countByGrade(code.codeID,2)} + '人'"></small>
+																		</h4>
+																		<div class="progress">
+																			<div class="progress-bar bg-orange"
+																				role="progressbar" aria-valuenow="85"
+																				aria-valuemin="0" aria-valuemax="100"
+																				th:style="'width:'+((${evaluateService.countRecord(code.codeID)} eq 0)?0:100*${evaluateService.countByGrade(code.codeID,2)}/${evaluateService.countRecord(code.codeID)})+'%'"></div>
+																		</div>
+																</a></li>
+																<li><a href="javascript:void(0);">
+																		<h4>
+																			一星 <small id="onestar" th:text="${evaluateService.countByGrade(code.codeID,1)} + '人'"></small>
+																		</h4>
+																		<div class="progress">
+																			<div class="progress-bar bg-purple"
+																				role="progressbar" aria-valuenow="85"
+																				aria-valuemin="0" aria-valuemax="100"
+																				th:style="'width:'+((${evaluateService.countRecord(code.codeID)} eq 0)?0:100*${evaluateService.countByGrade(code.codeID,1)}/${evaluateService.countRecord(code.codeID)})+'%'"></div>
+																		</div>
+																</a></li>
+															</ul>
+														</li>
+													</ul>
+												</ul>
+												<!-- #END# Tasks -->
+												<ul class="header-dropdown">
+													<li class="dropdown"><a href="javascript:void(0);"
+														class="dropdown-toggle" data-toggle="dropdown" role="button"
+														aria-haspopup="true" aria-expanded="false"> <i
+															class="material-icons">more_vert</i>
+													</a>
+														<ul class="dropdown-menu pull-right">
+															<li><a th:onclick="'javascript:showCode('+${code.codeID}+');'">当前查看代码</a></li>
+															<li><a th:onclick="'javascript:showCode2('+${code.codeID}+');'">转到页面查看代码</a></li>
+															<li th:if="${codeType} eq 2"><a
+																th:onclick="'javascript:showArchiving('+${session.User.userID}+','+${code.codeID}+');'">查看归档备注</a></li>
+															<li th:if="${codeType} eq 2"><a
+																th:onclick="'javascript:cancelArchiving('+${session.User.userID}+','+${code.codeID}+');'">取消归档</a></li>
+															<li th:if="${session.User.userType} ne 3"><a th:onclick="'codeAnalysis('+${code.codeID}+')'">代码分析</a></li>
+														</ul></li>
+												</ul>
+											</div>
+											<div class="panel-body">
+												<div class="post">
+													<div class="post-heading">
+														<span th:id="'describe'+${codeStat.index}"></span>
+														<span><a th:id="'btn'+${codeStat.index}" th:onclick="'change('+${codeStat.index}+')'"></a></span>
+													</div>
+												</div>
+											</div>
+											
+											<div class="panel-footer">
+												<ul>
+													<li><a href="#"> <i class="material-icons"
+															style="color: red">stars</i> 
+															<span th:text="${evaluateService.count(code.codeID)} + ' Stars'"></span>
+													</a></li>
+
+													<!-- 评论区域 -->
+													<li class="dropdown"><a href="javascript:void(0);"
+														class="dropdown-toggle" data-toggle="dropdown"
+														role="button"> <i class="material-icons">comment</i>
+													</a>
+														<ul class="dropdown-menu  smooth-scroll"
+															style="height: 500px; overflow: scroll">
+															<li class="header">用户评论</li>
+															<li class="body">
+																<ul class="menu">
+
+																	<li
+																		th:each="evaluate,evaluateStat : ${evaluateService.listEvaluateByCodeID(code.codeID)}">
+																		<a href="javascript:void(0);"> <span
+																			class="icon-circle bg-light-green"> <image
+																					class="icon-circle" th:src="(${userService.findUserByUserID(evaluate.userID).picture} ne null)?${userService.findUserByUserID(evaluate.userID).picture}:'/images/animation-bg.jpg'"></image>
+																		</span> <span><b
+																				th:text="${userService.findUserByUserID(evaluate.userID).name}"></b></span>
+																			<div class="menu-info">
+																				<h4 th:text="${evaluate.evaluateContext}"></h4>
+																				<p th:utext="'<i class=\'material-icons\'>access_time</i>'+${#dates.format(evaluate.evaluateTime,'yyyy-MM-dd')}"></p>
+																			</div>
+																	</a>
+																	</li>
+																</ul>
+															</li>
+														</ul></li>
+													<!-- #END# 评论区域 -->
+
+													<li><span th:text="${evaluateService.listEvaluateCountByCodeID(code.codeID)}"></span><span> Comments</span></li>
+
+													<li><span> 
+													<i class="material-icons" th:onclick="'javascript:copyToClipboard('+${code.codeID}+');'">share</i>
+													</span> <span>分享</span></li>
+												</ul>
+											</div>
+										</div>
+									</div>
+									<div style="text-align:center;">
+										<ul class="pagination">
+											<li><a style="height: 34px" th:if="${pages.pageNum} ne 1"
+												th:href="'/my/code/list/'+${codeType}+'?pagenum='+${pages.pageNum-1}">&laquo;</a></li>
+											<li><a th:if="${pages.pageNum} gt 5"
+												th:href="'/my/code/list/'+${codeType}+'?pagenum='+${pages.pageNum-5}">...</a>
+											<li>
+											<li th:each="i : ${pages.pageBeginToEnd}"
+												th:class="(${i} eq ${pages.pageNum})?'active':''"><a
+												th:href="'/my/code/list/'+${codeType}+'?pagenum='+${i}" th:text="${i}"></a></li>
+											<li><a th:if="${pages.pageNumAll} ge ${pages.pageNum+5}"
+												th:href="'/my/code/list/'+${codeType}+'?pagenum='+${pages.pageNum+5}">...</a>
+											<li>
+											<li><a style="height: 34px"
+												th:if="${pages.pageNum} lt ${pages.pageNumAll}"
+												th:href="'/my/code/list/'+${codeType}+'?pagenum='+${pages.pageNum+1}">&raquo;</a></li>
+										</ul>
+									</div>
+									
+									<!-- 模态框（Modal） 显示代码-->
+									<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+									    <div class="modal-dialog" style="width:1000px">
+									        <div class="modal-content">
+									            <div class="modal-header">
+									                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+									                <h4 class="modal-title" style="text-align: center;font-size: 35px" id="myModalLabel"></h4>
+									            </div>
+									            <div class="modal-body"><pre id="codeContext"></pre></div>
+									            <div class="modal-footer">
+									                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+									            	<button type="button" class="btn btn-default" onclick="copyCode()">复制代码</button>
+									            </div>
+									        </div><!-- /.modal-content -->
+									    </div><!-- /.modal -->
+									</div>
+									
+									<!-- 模态框（Modal） 代码分析-->
+									<div class="modal fade" id="simCode" tabindex="-1" role="dialog"
+										aria-labelledby="myModalLabel" aria-hidden="true">
+										<div class="modal-dialog" style="width: 1000px">
+											<div class="modal-content">
+												<div class="modal-header">
+													<button type="button" class="close" data-dismiss="modal"
+														aria-hidden="true">&times;</button>
+													<h4 class="modal-title" id="myModalLabel">相似代码</h4>
+												</div>
+												<div class="modal-body">
+													<div class="col-xs-12 ol-sm-12 col-md-12 col-lg-12">
+														<div class="panel-group" id="accordion_4" role="tablist"
+															aria-multiselectable="true">
+															
+														</div>
+													</div>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+												</div>
+											</div>
+											<!-- /.modal-content -->
+										</div>
+										<!-- /.modal -->
+									</div>
+									
+									<script th:inline="javascript">
+										function copyToClipboard(codeID){
+								            if(window.clipboardData){
+								            	alert("复制失败！");
+								            } else {
+								                 (function(codeID){
+								                       document.oncopy=function(e){
+								                            e.clipboardData.setData('text',"http://localhost:8080/code/" + codeID);
+								                            e.preventDefault();
+								                            document.oncopy=null;
+								                        }
+								                    })(codeID);
+								                    document.execCommand('Copy');
+								                    alert("复制成功！");
+								            }
+								       	}
+										function showCode(codeID){
+											$.ajax({
+												type: "get",
+												dataType: "json",
+									            contentType: "application/json",
+												url : "/countSelfIncrement/"+codeID,
+												success : function(data) {
+													$('#myModalLabel').text(data.codeTitle);
+													$('#codeContext').text(data.codeContext);
+													$('#myModal').modal('show');
+												}
+											});
+										}
+										
+										function copyCode(){
+											var codeContext =  $("#codeContext").text();
+								            if(window.clipboardData){
+								            	alert("复制失败！");
+								            } else {
+								                 (function(codeContext){
+								                       document.oncopy=function(e){
+								                            e.clipboardData.setData('text',codeContext);
+								                            e.preventDefault();
+								                            document.oncopy=null;
+								                        }
+								                    })(codeContext);
+								                    document.execCommand('Copy');
+								                    alert("复制成功！");
+								            }
+								       	}
+										
+										function showCode2(codeID){
+											window.open('/code/' + codeID);
+										}
+										
+										function showArchiving(userID,codeID){
+											$.ajax({
+												url : "/archiving/" + userID +"/" + codeID,
+												type : "get",
+												success : function(data) {
+													alert(data);
+												}
+											});
+										}
+										
+										function cancelArchiving(userID,codeID){
+											$.ajax({
+												url : "/cancelArchiving/" + userID +"/" + codeID,
+												type : "get",
+												success : function(data) {
+													alert(data);
+													window.location.reload();
+												}
+											});
+										}
+										
+										/*代码描述部分、全部显示实现*/
+									    var codes = [[${codes}]];
+									    for (i in codes) {
+									        if(codes[i].codeDescribe.length > 120) {
+									        	document.getElementById("describe"+i).innerHTML=codes[i].codeDescribe.substring(0, 120)+"...";
+									            document.getElementById("btn"+i).innerHTML = "全部";
+									        } else {
+									        	document.getElementById("describe"+i).innerHTML=codes[i].codeDescribe;
+									            document.getElementById("btn"+i).innerHTML = "";
+									        }
+									    }
+									    function change(i) {
+									        var t = document.getElementById("btn"+i);
+									        if(t.innerHTML == "全部") {
+									        	document.getElementById("describe"+i).innerHTML=codes[i].codeDescribe;
+									            t.innerHTML = "收起"
+									        } else {
+									        	document.getElementById("describe"+i).innerHTML=codes[i].codeDescribe.substring(0, 120)+"...";
+									            t.innerHTML = "全部"
+									        }
+									    }
+									    
+									    function codeAnalysis(codeID) {
+									    	$("#simCode").modal('show');
+									    	$("#accordion_4").empty();
+									    	$("#accordion_4").html("<div style='text-align: center;'><div id='loader4'></div><div style='margin-top: 10px'><span>分析中，请稍后。。。</span></div></div>");
+											$.ajax({
+												url : "/analysis/" + codeID,
+												type : "get",
+												success : function(data) {
+													if(data.length!=0){
+														var string="";
+														for(var i in data){
+															string+=("<div class='panel panel-danger'>"+
+									                                "<div class='panel-heading' role='tab' id='heading"+i+"'>"+
+									                                    "<h4 class='panel-title'>"+
+									                                        "<a class='collapsed text-center' role='button' data-toggle='collapse'"+
+									                                            "data-parent='#accordion_4' href='#collapse"+i+"'"+
+									                                            "aria-expanded='false' aria-controls='collapseTwo_4' id='ct+"+i+"'><strong>"+
+									                                            data[i].codeTitle+"("+data[i].similarity+")</strong></a>"+
+									                                    "</h4>"+
+									                                "</div>"+
+									                                "<div id='collapse"+i+"' class='panel-collapse collapse'"+
+									                                    "role='tabpanel' aria-labelledby='heading"+i+"'>"+
+									                                    "<div class='panel-body'>"+
+									                                        "<pre id='co"+i+"'>"+data[i].code+"</pre>"+
+									                                    "</div>"+
+									                                "</div>"+
+									                            "</div>");
+														}
+														$("#accordion_4").html(string);
+													} else {
+														$("#accordion_4").html("<h2 class='text-center'>没有相似代码！</h2>");
+													}
+												}
+											});
+										}
+									</script>
+									</div>
+									<!-- 第一列结束-->
+									
+										<!-- 第二列开始-->
+										<div th:if="${articleType ne null}">
+										<script th:inline="javascript">
+										    var articleType = [[${articleType}]];
+										    function showArticle(articleID){
+										    	window.open('/article/' + articleType + '/' + articleID);
+					                        }
+										    function  copyToClipboard(articleID){
+					                            if(window.clipboardData){
+					                            	alert("复制失败！");
+					                            } else {
+					                                 (function(articleID){
+					                                       document.oncopy=function(e){
+					                                            e.clipboardData.setData('text',"http://localhost:8080/article/" + articleType + "/" + articleID);
+					                                            e.preventDefault();
+					                                            document.oncopy=null;
+					                                        }
+					                                    })(articleID);
+					                                    document.execCommand('Copy');
+					                                    alert("复制成功！");
+					                            }
+					                       }
+					                    
+										</script>
+					
+										<div role="tabpanel" th:each="article,articleStat : ${articles}" class="tab-pane fade in" th:onclick="'javascript:showArticle('+${article.articleID}+');'">
+											<div class="panel panel-default panel-post">
+												<div class="panel-heading">
+													<!-- 标题 -->
+													<a>
+														<span id="code-title" class="font-32" th:text="${article.articleTitle}"></span>
+													</a>
+													<!-- 类型 -->
+													<span id="code-type" class="font-20" th:text="${typeService.findTypeByTypeID(article.typeID).typeContext}"></span>
+													<!-- 灰色竖直线 -->
+													<span
+														style="height: 50px; border: 1px solid #9E9E9E; margin-right: 10px; margin-left: 10px;"></span>
+													<!-- 发布日期 -->
+													<span id="code-type" class="font-20" th:text="${#dates.format(article.uploadTime,'yyyy-MM-dd')}"></span>
+													<!-- 灰色竖直线 -->
+													<span
+														style="height: 50px; border: 1px solid #9E9E9E; margin-right: 10px; margin-left: 10px;"></span>
+
+													<!-- 阅读数 -->
+													<span>阅读数 </span> <span id="code-type" class="font-20"
+														style="margin-right: 60px" th:text="${article.count}"></span>
+													<!-- 关键字 -->
+													<span th:if="${article.keyword ne null}"
+													th:each="keyword,keywordStat : ${htmlUtil.splitString(article.keyword)}"
+													th:class="${keyword.key}" th:text="${keyword.value}"
+													style="margin-right: 10px"></span>
+												</div>
+												<div class="panel-body" th:onclick="'javascript:showArticle('+${article.articleID}+');'">
+
+													<div class="post">
+														<div class="post-heading">
+															<p style="font-size: 15px" th:text="${htmlUtil.htmlToText(article.articleContext)}"></p>
+														</div>
+													</div>
+													<div class="panel-footer">
+													<div style="text-align:right;margin:0px auto 0px auto;">
+														<span> <i class="material-icons"
+															th:onclick="'javascript:copyToClipboard('+${article.articleID}+');'">share</i>
+														</span> <span>分享</span>
+													</div>
+												</div>
+												</div>
+												</div>
+											</div>
+												<div style="text-align:center;">
+												<ul class="pagination">
+													<li><a style="height: 34px" th:if="${pages.pageNum} ne 1"
+														th:href="'/my/article/list/' + ${articleType} + '?pagenum='+${pages.pageNum-1}">&laquo;</a>
+													</li>
+													<li><a th:if="${pages.pageNum} gt 5"
+														th:href="'/my/article/list/' + ${articleType} + '?pagenum='+${pages.pageNum-5}">...</a>
+													<li>
+													<li th:each="i : ${pages.pageBeginToEnd}"
+														th:class="(${i} eq ${pages.pageNum})?'active':''"><a
+														th:href="'/my/article/list/' + ${articleType} + '?pagenum='+${i}"
+														th:text="${i}"></a></li>
+													<li><a th:if="${pages.pageNumAll} ge ${pages.pageNum+5}"
+														th:href="'/my/article/list/' + ${articleType} + '?pagenum='+${pages.pageNum+5}">...</a>
+													<li>
+													<li><a style="height: 34px"
+														th:if="${pages.pageNum} lt ${pages.pageNumAll}"
+														th:href="'/my/article/list/' + ${articleType} + '?pagenum='+${pages.pageNum+1}">&raquo;</a>
+													</li>
+												</ul>
+											</div>
+										</div>
+										<!-- 第二列结束-->
+									</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	</section>
+
+	<!-- Jquery Core Js -->
+	<script src="/plugins/jquery/jquery.min.js"></script>
+
+	<!-- Bootstrap Core Js -->
+	<script src="/plugins/bootstrap/js/bootstrap.js"></script>
+
+	<!-- Select Plugin Js -->
+	<script src="/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+
+	<!-- Slimscroll Plugin Js -->
+	<script src="/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+
+	<!-- Waves Effect Plugin Js -->
+	<script src="/plugins/node-waves/waves.js"></script>
+
+	<!-- Custom Js -->
+	<script src="/js/admin.js"></script>
+	<script src="/js/pages/examples/profile.js"></script>
+
+	<!-- Demo Js -->
+	<script src="/js/demo.js"></script>
+</body>
+
+</html>

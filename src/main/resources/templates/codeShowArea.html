@@ -1,0 +1,556 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8">
+<meta
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+	name="viewport">
+<title>代码展示</title>
+
+<!-- Favicon-->
+<link rel="icon" href="../favicon.ico" type="image/x-icon">
+
+<!-- Google Fonts -->
+<link
+	href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext"
+	rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet" type="text/css">
+
+<!-- Bootstrap Core Css -->
+<link href="/plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+<!-- Waves Effect Css -->
+<link href="/plugins/node-waves/waves.css" rel="stylesheet" />
+
+<!-- Animation Css -->
+<link href="/plugins/animate-css/animate.css" rel="stylesheet" />
+
+<!-- Custom Css -->
+<link href="/css/style.css" rel="stylesheet">
+
+<!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+<link href="/css/themes/all-themes.css" rel="stylesheet" />
+<!-- 预加载 -->
+<link href="/css/loader.css" rel="stylesheet" />
+
+<!-- 用于评级用的星星jQuery -->
+<link
+	href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css"
+	rel="stylesheet">
+<link href="/css/star-rating.min.css" media="all" rel="stylesheet"
+	type="text/css" />
+<script src="http://libs.baidu.com/jquery/1.10.2/jquery.min.js"></script>
+<script src="/js/star-rating.min.js" type="text/javascript"></script>
+
+</head>
+
+<body class="theme-red">
+	<!-- Top Bar -->
+	<div th:replace="topbar :: topbar"></div>
+	<!-- #Top Bar -->
+	<section>
+		<!-- Left Sidebar -->
+		<div th:replace="menu :: menu"></div>
+		<!-- #END# Left Sidebar -->
+		<!-- Right Sidebar -->
+		<div th:replace="right :: right"></div>
+		<!-- #END# Right Sidebar -->
+	</section>
+
+	<section class="content" style="margin-top: 30px;">
+		<div class="container-fluid">
+			<div class="block-header">
+				<span class="font-50">代码展示区</span>
+			</div>
+			<!-- Body Copy -->
+			<div class="row clearfix">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+					<div th:each="code,codeStat : ${codes}" class="card">
+						<div class="header">
+
+							<!-- 标题 -->
+							<a> <span id="codeTitle" class="font-32"
+								style="margin-right: 20px" th:text="${code.codeTitle}"></span>
+							</a>
+							<!-- 类型 -->
+							<span id="code-type" class="font-20"
+								th:text="${typeService.findTypeByTypeID(code.typeID).typeContext}"></span>
+							<!-- 灰色竖直线 -->
+							<span
+								style="height: 50px; border: 1px solid #9E9E9E; margin-right: 10px; margin-left: 10px;"></span>
+							<!-- 发布日期 -->
+							<span id="code-type" class="font-20"
+								th:text="${#dates.format(code.uploadTime,'yyyy-MM-dd')}"></span>
+							<!-- 灰色竖直线 -->
+							<span
+								style="height: 50px; border: 1px solid #9E9E9E; margin-right: 10px; margin-left: 10px;"></span>
+
+							<!-- 阅读数 -->
+							<span>阅读数 </span> <span class="font-20"
+								style="margin-right: 60px" th:text="${code.count}"></span>
+							<!-- 关键字 -->
+							<span th:if="${code.keyword ne null}"
+								th:each="keyword,keywordStat : ${htmlUtil.splitString(code.keyword)}"
+								th:class="${keyword.key}" th:text="${keyword.value}"
+								style="margin-right: 10px"></span> <input
+								th:id="'star'+${codeStat.index}" type="number" class="rating"
+								min=0 max=5 step=1 data-size="4-lg">
+							<!-- Tasks -->
+							<ul class="dropdown">
+								<a href="javascript:void(0);" class="dropdown-toggle"
+									data-toggle="dropdown" role="button">
+									<h2>
+										<span class="label bg-red"
+											th:text="(${evaluateService.countRecord(code.codeID)} eq 0)?
+										0:${#numbers.formatDecimal(100*evaluateService.countByGrade(code.codeID,5)/evaluateService.countRecord(code.codeID)+
+										80*evaluateService.countByGrade(code.codeID,4)/evaluateService.countRecord(code.codeID)+
+										60*evaluateService.countByGrade(code.codeID,3)/evaluateService.countRecord(code.codeID)+
+										40*evaluateService.countByGrade(code.codeID,2)/evaluateService.countRecord(code.codeID)+
+										20*evaluateService.countByGrade(code.codeID,1)/evaluateService.countRecord(code.codeID),1,0)}"></span>
+									</h2>
+								</a>
+								<ul class="dropdown-menu">
+									<li class="header">用户评价</li>
+									<li class="body">
+										<ul class="menu tasks">
+											<li><a href="javascript:void(0);">
+													<h4>
+														五星 <small id="fivestar"
+															th:text="${evaluateService.countByGrade(code.codeID,5)} + '人'"></small>
+													</h4>
+													<div class="progress">
+														<div class="progress-bar bg-pink" role="progressbar"
+															aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"
+															th:style="'width:'+((${evaluateService.countRecord(code.codeID)} eq 0)?0:100*${evaluateService.countByGrade(code.codeID,5)}/${evaluateService.countRecord(code.codeID)})+'%'"></div>
+													</div>
+											</a></li>
+											<li><a href="javascript:void(0);">
+													<h4>
+														四星 <small id="fourstar"
+															th:text="${evaluateService.countByGrade(code.codeID,4)} + '人'"></small>
+													</h4>
+													<div class="progress">
+														<div class="progress-bar bg-cyan" role="progressbar"
+															aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"
+															th:style="'width:'+((${evaluateService.countRecord(code.codeID)} eq 0)?0:100*${evaluateService.countByGrade(code.codeID,4)}/${evaluateService.countRecord(code.codeID)})+'%'"></div>
+													</div>
+											</a></li>
+											<li><a href="javascript:void(0);">
+													<h4>
+														三星 <small id="threestar"
+															th:text="${evaluateService.countByGrade(code.codeID,3)} + '人'"></small>
+													</h4>
+													<div class="progress">
+														<div class="progress-bar bg-teal" role="progressbar"
+															aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"
+															th:style="'width:'+((${evaluateService.countRecord(code.codeID)} eq 0)?0:100*${evaluateService.countByGrade(code.codeID,3)}/${evaluateService.countRecord(code.codeID)})+'%'"></div>
+													</div>
+											</a></li>
+											<li><a href="javascript:void(0);">
+													<h4>
+														二星 <small id="twostar"
+															th:text="${evaluateService.countByGrade(code.codeID,2)} + '人'"></small>
+													</h4>
+													<div class="progress">
+														<div class="progress-bar bg-orange" role="progressbar"
+															aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"
+															th:style="'width:'+((${evaluateService.countRecord(code.codeID)} eq 0)?0:100*${evaluateService.countByGrade(code.codeID,2)}/${evaluateService.countRecord(code.codeID)})+'%'"></div>
+													</div>
+											</a></li>
+											<li><a href="javascript:void(0);">
+													<h4>
+														一星 <small id="onestar"
+															th:text="${evaluateService.countByGrade(code.codeID,1)} + '人'"></small>
+													</h4>
+													<div class="progress">
+														<div class="progress-bar bg-purple" role="progressbar"
+															aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"
+															th:style="'width:'+((${evaluateService.countRecord(code.codeID)} eq 0)?0:100*${evaluateService.countByGrade(code.codeID,1)}/${evaluateService.countRecord(code.codeID)})+'%'"></div>
+													</div>
+											</a></li>
+
+										</ul>
+									</li>
+								</ul>
+							</ul>
+							<!-- #END# Tasks -->
+
+							<!-- 测试评级开始 -->
+
+							<!-- 测试评级结束 -->
+
+							<ul class="header-dropdown">
+								<li class="dropdown"><a href="javascript:void(0);"
+									class="dropdown-toggle" data-toggle="dropdown" role="button"
+									aria-haspopup="true" aria-expanded="false"> <i
+										class="material-icons">more_vert</i>
+								</a>
+									<ul class="dropdown-menu pull-right">
+										<li><a
+											th:onclick="'javascript:showCode('+${code.codeID}+');'">当前查看代码</a></li>
+										<li><a
+											th:onclick="'javascript:showCode2('+${code.codeID}+');'">转到页面查看代码</a></li>
+										<li th:if="${session.User.userType} ne 3"><a
+											th:onclick="'javascript:openArchiving('+${session.User.userID}+','+${code.codeID}+');'">代码归档</a></li>
+										<li th:if="${session.User.userType} ne 3"><a
+											th:onclick="'codeAnalysis('+${code.codeID}+')'">代码分析</a></li>
+									</ul></li>
+							</ul>
+						</div>
+						<div class="body">
+							<span class="lead" style="font-size: 15px"
+								th:id="'describe'+${codeStat.index}"></span> <span><a
+								th:id="'btn'+${codeStat.index}"
+								th:onclick="'change('+${codeStat.index}+')'"></a></span>
+
+							<div class="tab-content" style="margin-top: 20px">
+								<div role="tabpanel" class="tab-pane fade in active" id="home">
+									<div class="panel panel-default panel-post">
+										<div class="panel-footer">
+											<ul>
+												<li><a href="#"> <i class="material-icons"
+														style="color: red">stars</i> <span
+														th:text="${evaluateService.count(code.codeID)} + ' Stars'"></span>
+												</a></li>
+
+
+												<!-- 评论区域 -->
+												<li class="dropdown"><a href="javascript:void(0);"
+													class="dropdown-toggle" data-toggle="dropdown"
+													role="button"> <i class="material-icons">comment</i>
+												</a>
+													<ul class="dropdown-menu  smooth-scroll"
+														style="height: 500px; overflow: scroll">
+														<li class="header">用户评论</li>
+														<li class="body">
+															<ul class="menu">
+
+																<li
+																	th:each="evaluate,evaluateStat : ${evaluateService.listEvaluateByCodeID(code.codeID)}">
+																	<a href="javascript:void(0);"> <span
+																		class="icon-circle bg-light-green"> <image
+																				class="icon-circle"
+																				th:src="(${userService.findUserByUserID(evaluate.userID).picture} ne null)?${userService.findUserByUserID(evaluate.userID).picture}:'/images/animation-bg.jpg'"></image>
+																	</span> <span><b
+																			th:text="${userService.findUserByUserID(evaluate.userID).name}"></b></span>
+																		<div class="menu-info">
+																			<h4 th:text="${evaluate.evaluateContext}"></h4>
+																			<p
+																				th:utext="'<i class=\'material-icons\'>access_time</i>'+${#dates.format(evaluate.evaluateTime,'yyyy-MM-dd')}"></p>
+																		</div>
+																</a>
+																</li>
+
+															</ul>
+														</li>
+													</ul> <!-- #END# 评论区域 -->
+												<li><span
+													th:text="${evaluateService.listEvaluateCountByCodeID(code.codeID)}"></span><span>
+														Comments</span></li>
+												<li><span> <i class="material-icons"
+														th:onclick="'javascript:copyToClipboard('+${code.codeID}+');'">share</i>
+												</span> <span>分享</span></li>
+											</ul>
+
+											<div class="form-group">
+												<div class="form-line">
+													<input type="hidden" th:id="'codeID'+${codeStat.index}"
+														th:value="${code.codeID}"> <input type="hidden"
+														id="user" th:value="${session.User.userID}" /> <input
+														type="text" class="form-control" placeholder="请留下你想说的话..."
+														th:id="'evaluateContext'+${codeStat.index}"
+														th:onkeypress="'javascript:addEvaluate('+${codeStat.index}+');'" />
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- 一个展示结束 -->
+				</div>
+			</div>
+		</div>
+		<div style="text-align: center;">
+			<ul class="pagination">
+				<li><a style="height: 34px" th:if="${pages.pageNum} ne 1"
+					th:href="'/code/list/' + ${type} + '?pagenum='+${pages.pageNum-1}">&laquo;</a></li>
+				<li><a th:if="${pages.pageNum} gt 5"
+					th:href="'/code/list/' + ${type} + '?pagenum='+${pages.pageNum-5}">...</a>
+				<li>
+				<li th:each="i : ${pages.pageBeginToEnd}"
+					th:class="(${i} eq ${pages.pageNum})?'active':''"><a
+					th:href="'/code/list/' + ${type} + '?pagenum='+${i}" th:text="${i}"></a></li>
+				<li><a th:if="${pages.pageNumAll} ge ${pages.pageNum+5}"
+					th:href="'/code/list/' + ${type} + '?pagenum='+${pages.pageNum+5}">...</a>
+				<li>
+				<li><a style="height: 34px"
+					th:if="${pages.pageNum} lt ${pages.pageNumAll}"
+					th:href="'/code/list/' + ${type} + '?pagenum='+${pages.pageNum+1}">&raquo;</a></li>
+			</ul>
+		</div>
+	</section>
+
+	<!-- 模态框（Modal） 显示代码-->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog" style="width: 1000px">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" style="text-align: center; font-size: 35px"
+						id="myModalLabel"></h4>
+				</div>
+				<div class="modal-body">
+					<pre id="codeContext"></pre>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-default" onclick="copyCode()">复制代码</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal -->
+	</div>
+
+	<!-- 模态框（Modal） 归档代码-->
+	<div class="modal fade" id="aCode" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" style="text-align: center; font-size: 35px">归档代码</h4>
+				</div>
+				<div class="modal-body">
+					<input type="hidden" id="aUserID"> <input type="hidden"
+						id="aCodeID"> <input type="text" id="archiving"
+						class="form-control">
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-default"
+						onclick="archivingCode()">归档</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal -->
+	</div>
+
+	<!-- 模态框（Modal） 代码分析-->
+	<div class="modal fade" id="simCode" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog" style="width: 1000px">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">相似代码</h4>
+				</div>
+				<div class="modal-body">
+					<div class="col-xs-12 ol-sm-12 col-md-12 col-lg-12">
+						<div class="panel-group" id="accordion_4" role="tablist"
+							aria-multiselectable="true">
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal -->
+	</div>
+
+	<script th:inline="javascript">
+		function addEvaluate(id) {
+			if (event.keyCode==13 && $("#evaluateContext" + id).val()) {
+				$.ajax({
+					url : "/evaluate/add",
+					type : "post",
+					data : {
+						"codeID" : $("#codeID" + id).val(),
+						"userID" : $("#user").val(),
+						"evaluateContext" : $("#evaluateContext"+id).val(),
+						"grade" : $('#star'+id).val(),
+						"evaluateTime" : new Date()
+					},
+					success : function(data) {
+						alert(data);
+						window.location.reload();
+					}
+				});
+			}
+		}
+		function copyToClipboard(codeID){
+            if(window.clipboardData){
+            	alert("复制失败！");
+            } else {
+                 (function(codeID){
+                       document.oncopy=function(e){
+                            e.clipboardData.setData('text',"http://localhost:8080/code/" + codeID);
+                            e.preventDefault();
+                            document.oncopy=null;
+                        }
+                    })(codeID);
+                    document.execCommand('Copy');
+                    alert("复制成功！");
+            }
+       	}
+		
+		function copyCode(){
+			var codeContext =  $("#codeContext").text();
+            if(window.clipboardData){
+            	alert("复制失败！");
+            } else {
+                 (function(codeContext){
+                       document.oncopy=function(e){
+                            e.clipboardData.setData('text',codeContext);
+                            e.preventDefault();
+                            document.oncopy=null;
+                        }
+                    })(codeContext);
+                    document.execCommand('Copy');
+                    alert("复制成功！");
+            }
+       	}
+		
+		function showCode(codeID){
+			$.ajax({
+				type: "get",
+				dataType: "json",
+	            contentType: "application/json",
+				url : "/countSelfIncrement/"+codeID,
+				success : function(data) {
+					$('#myModalLabel').text(data.codeTitle);
+					$('#codeContext').text(data.codeContext);
+					$('#myModal').modal('show');
+				}
+			});
+		}
+		
+		function showCode2(codeID){
+			window.open('/code/' + codeID);
+		}
+		
+		function openArchiving(userID,codeID){
+			$('#aUserID').val(userID);
+			$('#aCodeID').val(codeID);
+			$("#archiving").val('');
+			$('#aCode').modal('show');
+		}
+		
+		function archivingCode(){
+			$.ajax({
+				url : "/archiving/add",
+				type : "post",
+				data : {
+					"userID" : $("#aUserID").val(),
+					"codeID" : $("#aCodeID").val(),
+					"remarks" : $("#archiving").val(),
+					"archivingTime" : new Date()
+				},
+				success : function(data) {
+					$('#aCode').modal('hide');
+					alert(data);
+				}
+			});
+		}
+		
+		/*描述部分与全部显示实现*/
+	    var codes = [[${codes}]];
+	    for (i in codes) {
+	        if(codes[i].codeDescribe.length > 120) {
+	            document.getElementById("describe"+i).innerHTML=codes[i].codeDescribe.substring(0, 120)+"...";
+	            document.getElementById("btn"+i).innerHTML = "全部";
+	        } else {
+	            document.getElementById("describe"+i).innerHTML=codes[i].codeDescribe;
+	            document.getElementById("btn"+i).innerHTML = "";
+	        }
+	    }
+	    function change(i) {
+	        var t = document.getElementById("btn"+i);
+	        if(t.innerHTML == "全部") {
+	            document.getElementById("describe"+i).innerHTML=codes[i].codeDescribe;
+	            t.innerHTML = "收起"
+	        } else {
+	            document.getElementById("describe"+i).innerHTML=codes[i].codeDescribe.substring(0, 120)+"...";
+	            t.innerHTML = "全部"
+	        }
+	    }
+	    
+	    function codeAnalysis(codeID) {
+	    	$("#simCode").modal('show');
+	    	$("#accordion_4").empty();
+	    	$("#accordion_4").html("<div style='text-align: center;'><div id='loader4'></div><div style='margin-top: 10px'><span>分析中，请稍后。。。</span></div></div>");
+			$.ajax({
+				url : "/analysis/" + codeID,
+				type : "get",
+				success : function(data) {
+					if(data.length!=0){
+						var string="";
+						for(var i in data){
+							string+=("<div class='panel panel-danger'>"+
+	                                "<div class='panel-heading' role='tab' id='heading"+i+"'>"+
+	                                    "<h4 class='panel-title'>"+
+	                                        "<a class='collapsed text-center' role='button' data-toggle='collapse'"+
+	                                            "data-parent='#accordion_4' href='#collapse"+i+"'"+
+	                                            "aria-expanded='false' aria-controls='collapseTwo_4' id='ct+"+i+"'><strong>"+
+	                                            data[i].codeTitle+"("+data[i].similarity+")</strong></a>"+
+	                                    "</h4>"+
+	                                "</div>"+
+	                                "<div id='collapse"+i+"' class='panel-collapse collapse'"+
+	                                    "role='tabpanel' aria-labelledby='heading"+i+"'>"+
+	                                    "<div class='panel-body'>"+
+	                                        "<pre id='co"+i+"'>"+data[i].code+"</pre>"+
+	                                    "</div>"+
+	                                "</div>"+
+	                            "</div>");
+						}
+						$("#accordion_4").html(string);
+					} else {
+						$("#accordion_4").html("<h2 class='text-center'>没有相似代码！</h2>");
+					}
+				}
+			});
+		}
+	    
+	    var type = [[${type}]];	  
+	    $('#browse').show();
+    	$('#codeShow').show();
+    	$("#c"+type).css({"color":"blue","font-size":"18px"});
+	</script>
+
+
+	<!-- Jquery Core Js -->
+	<script src="/plugins/jquery/jquery.min.js"></script>
+
+	<!-- Bootstrap Core Js -->
+	<script src="/plugins/bootstrap/js/bootstrap.js"></script>
+
+	<!-- Select Plugin Js -->
+	<script src="/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+
+	<!-- Slimscroll Plugin Js -->
+	<script src="/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+
+	<!-- Waves Effect Plugin Js -->
+	<script src="/plugins/node-waves/waves.js"></script>
+
+	<!-- Custom Js -->
+	<script src="/js/admin.js"></script>
+
+	<!-- Demo Js -->
+	<script src="/js/demo.js"></script>
+</body>
+
+</html>

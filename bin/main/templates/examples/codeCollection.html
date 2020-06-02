@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<title>代码征集展示</title>
+
+<!-- Favicon-->
+<link rel="icon" href="../../favicon.ico" type="image/x-icon">
+
+<!-- Google Fonts -->
+<link
+	href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext"
+	rel="stylesheet" type="text/css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet" type="text/css">
+
+<!-- Bootstrap Core Css -->
+<link rel="stylesheet" th:href="@{/plugins/bootstrap/css/bootstrap.css}" />
+
+<!-- Waves Effect Css -->
+<link rel="stylesheet" th:href="@{/plugins/node-waves/waves.css}" />
+
+<!-- Bootstrap Tagsinput Css -->
+<link rel="stylesheet"
+	th:href="@{/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css}" />
+
+<!-- Animation Css -->
+<link rel="stylesheet" th:href="@{/plugins/animate-css/animate.css}" />
+
+<!-- Custom Css -->
+<link rel="stylesheet" th:href="@{/css/style.css}" />
+
+<!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+<link rel="stylesheet" th:href="@{/css/themes/all-themes.css}" />
+
+<script type="text/javascript" th:src="@{/plugins/jquery/jquery.min.js}"></script>
+
+<link rel="stylesheet" th:href="@{/editor/css/editormd.preview.min.css}" />
+<link rel="stylesheet" th:href="@{/editor/css/editormd.css}" />
+
+<!-- 拖动文件上传 -->
+<!-- Dropzone Css -->
+    <link href="../../plugins/dropzone/dropzone.css" rel="stylesheet">
+    <!-- Dropzone Plugin Js -->
+    <script src="../../plugins/dropzone/dropzone.js"></script>
+</head>
+<body>
+	<!-- Top Bar -->
+	<div th:replace="topbar :: topbar"></div>
+	<!-- #Top Bar -->
+	<section>
+		<!-- Left Sidebar -->
+		<div th:replace="menu :: menu"></div>
+		<!-- #END# Left Sidebar -->
+		<!-- Right Sidebar -->
+		<div th:replace="right :: right"></div>
+		<!-- #END# Right Sidebar -->
+	</section>
+
+
+	<section class="content">
+
+		<div class="panel panel-default panel-post">
+			<div class="panel-heading">
+				<div class="media" style="float: left">
+					<div class="media-left">
+						<a href="#"> <img th:src="(${userService.findUserByUserID(article.userID).picture} ne null)?${userService.findUserByUserID(article.userID).picture}:'../../images/user-lg.jpg'" />
+						</a>
+					</div>
+					<div class="media-body">
+
+						<h4 class="media-heading">
+							<a href="#" th:text="${userService.findUserByUserID(article.userID).name}"></a>
+						</h4>
+						<div th:text="'发表日期：' + ${#dates.format(article.uploadTime,'yyyy-MM-dd')} + '&nbsp;&nbsp;&nbsp;&nbsp;阅读次数：' + ${article.count}" style="float: left;margin-right: 50px"></div>
+						<!-- 关键字 -->
+							<span th:if="${article.keyword ne null}" th:each="keyword,keywordStat : ${htmlUtil.splitString(article.keyword)}" th:class="${keyword.key}" th:text="${keyword.value}" style="margin-right: 20px"></span>
+					</div>
+				</div>
+				<div align="center">
+					<h1 class="card-inside-title" th:text="${article.articleTitle}"></h1>
+				</div>
+			</div>
+			<div class="panel-body">
+				<!-- 因为我们使用了dark主题，所以在容器div上加上dark的主题类，实现我们自定义的代码样式 -->
+				<div class="container">
+					<div class="row">
+						<div class="content editormd-preview-theme" id="content"
+							th:utext="${article.articleContext}"></div>
+					</div>
+				</div>
+				<script type="text/javascript" th:src="@{/editor/lib/marked.min.js}"></script>
+				<script type="text/javascript"
+					th:src="@{/editor/lib/prettify.min.js}"></script>
+				<script type="text/javascript" th:src="@{/editor/editormd.min.js}"></script>
+				<script type="text/javascript">
+					editormd.markdownToHTML("content");
+				</script>
+			</div>
+			<div class="panel-footer">
+				<hr>
+				<div>
+					<h5 class="card-header">
+						<i class="fa fa-comments" aria-hidden="true"></i> 评论
+					</h5>
+					<hr class="my-4">
+					<div class="card-body">
+						<div class="card-title">
+							<i class="fa fa-github" aria-hidden="true" th:text="${session.User.name}"></i>
+						</div>
+						<!-- File Upload | Drag & Drop OR With Click & Choose -->
+			            <div class="row clearfix">
+			                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+			                    <div class="card">
+			                        <div class="body">
+			                            <form th:action="'/file/code/'+${session.User.userID}+'/'+${article.articleID}" id="frmFileUpload" class="dropzone" method="post" enctype="multipart/form-data">
+			                                <div class="dz-message">
+			                                    <div class="drag-icon-cph">
+			                                        <i class="material-icons">touch_app</i>
+			                                    </div>
+			                                    <h3>请将你想上传的代码文件拖动到这里...</h3>
+			                                </div>
+			                                <div class="fallback">
+			                                    <input name="file" type="file" multiple />
+			                                </div>
+			                            </form>
+			                        </div>
+			                    </div>
+			                </div>
+			            </div>
+			            <!-- #END# File Upload | Drag & Drop OR With Click & Choose -->
+					</div>
+					
+					<script th:inline="javascript">
+						
+					</script>
+					
+					<div class="card-footer text-muted">
+						<hr class="my-4">
+						<div class="commentList">
+							<div th:onmouseover="'mOver('+${commentStat.index}+')'" th:onmouseout="'mOut('+${commentStat.index}+')'" th:each = "comment,commentStat : ${comments}">
+								<div class="commentBox">
+									<span class="name"> <i class="fa fa-github"
+										aria-hidden="true"><b th:text="${userService.findUserByUserID(comment.userID).name} + '&nbsp; &nbsp;'"></b></i></span> 
+									<span class="date" th:text="${#dates.format(comment.commentTime,'yyyy-MM-dd')} +'&nbsp;&nbsp;'"><b></b></span> 
+								</div>
+								<div class="commentContent" th:utext="${comment.commentContext}"></div>
+								<div class="row">
+								<!-- 采纳之后出现“ √ ” 不采纳“ √ ”消失-->
+		                   	    	<div th:id="'acceptTag'+${commentStat.index}" class="col-md-1" th:style="'display:'+((${comment.remarks} eq '')?'none':'')"><i class="material-icons md-48 orange600">done</i></div>
+		                   	    	<!-- 这里是隐藏的“回复按钮” -->
+		                   	    	<div th:id="'acceptText'+${commentStat.index}" th:onclick="'updateRemarks('+${comment.commentID}+','+${commentStat.index}+')'" style="display:none;" class="col-md-2" th:text="(${comment.remarks} eq '')?'采纳':'已采纳'"></div>
+								</div>
+								<hr class="my-4">
+							</div>
+							
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</section>
+	<script th:inline="javascript">
+		    var user1 = [[${session.User.userID}]];
+		    var user2 = [[${article.userID}]];
+		    //"回复"显示和隐藏脚本
+		    function mOver(id){
+		    	if(user1 == user2){
+		    		$("#acceptText"+id).show();
+		    	}
+		    }
+		    function mOut(id){
+				if(user1 == user2){
+					$("#acceptText"+id).hide();
+		    	}
+		    }
+		    
+		    function updateRemarks(commentID,id){
+				 var tmp = $("#acceptText"+id).text();
+				 if(tmp=="采纳"){
+					 $("#acceptText"+id).text("已采纳");
+					 $("#acceptTag"+id).show();
+					 $.ajax({
+							type : "post",
+							url : "/updateRemarks/"+commentID+"/1",
+							success : function(data) {
+							}
+					});
+				 } else {
+					 $("#acceptText"+id).text("采纳");
+					 $("#acceptTag"+id).hide();
+					 $.ajax({
+							type : "post",
+							url : "/updateRemarks/"+commentID+"/0",
+							success : function(data) {
+							}
+					});
+				 }
+			 }
+	</script>
+
+	<!-- Jquery Core Js -->
+	<script src="../../plugins/jquery/jquery.min.js"></script>
+
+	<!-- Bootstrap Core Js -->
+	<script src="../../plugins/bootstrap/js/bootstrap.js"></script>
+
+	<!-- Select Plugin Js -->
+	<script src="../../plugins/bootstrap-select/js/bootstrap-select.js"></script>
+
+	<!-- Slimscroll Plugin Js -->
+	<script src="../../plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+
+	<!-- Waves Effect Plugin Js -->
+	<script src="../../plugins/node-waves/waves.js"></script>
+
+	<!-- Ckeditor -->
+	<script src="../../plugins/ckeditor/ckeditor.js"></script>
+
+	<!-- TinyMCE -->
+	<script src="../../plugins/tinymce/tinymce.js"></script>
+
+	<!-- Custom Js -->
+	<script src="../../js/admin.js"></script>
+	<script src="../../js/pages/forms/editors.js"></script>
+
+	<!-- Demo Js -->
+	<script src="../../js/demo.js"></script>
+</body>
+</html>
